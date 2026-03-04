@@ -25,10 +25,10 @@ const url = require("url");
 
 // TypeORM and Database
 require("reflect-metadata");
-const { AppDataSource } = require("./db/datasource");
 const MigrationManager = require("../utils/dbUtils/migrationManager");
 const PrinterService = require("../services/PrinterService");
 const CashDrawerService = require("../services/CashDrawerService");
+const { AppDataSource } = require("./db/datasource.js");
 
 // ===================== TYPE DEFINITIONS =====================
 /**
