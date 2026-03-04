@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import productAPI, { type Product } from "../../../api/product";
+import productAPI, { type Product } from "../../../api/utils/product";
 
 export interface ProductFilters {
   search: string;
   status: "active" | "inactive" | "all";
-  category: string;               // category name (for filtering)
+  category: string; // category name (for filtering)
   lowStock: boolean;
 }
 
@@ -14,7 +14,7 @@ export function useProducts(initialFilters: ProductFilters) {
   const [filters, setFilters] = useState<ProductFilters>(initialFilters);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [categories, setCategories] = useState<string[]>([]);  // array of names
+  const [categories, setCategories] = useState<string[]>([]); // array of names
 
   const loadProducts = async () => {
     setLoading(true);
@@ -70,7 +70,7 @@ export function useProducts(initialFilters: ProductFilters) {
         (p) =>
           p.name.toLowerCase().includes(lower) ||
           p.sku.toLowerCase().includes(lower) ||
-          (p.description && p.description.toLowerCase().includes(lower))
+          (p.description && p.description.toLowerCase().includes(lower)),
       );
     }
 
@@ -80,7 +80,7 @@ export function useProducts(initialFilters: ProductFilters) {
 
     if (filters.status !== "all") {
       filtered = filtered.filter(
-        (p) => p.isActive === (filters.status === "active")
+        (p) => p.isActive === (filters.status === "active"),
       );
     }
 

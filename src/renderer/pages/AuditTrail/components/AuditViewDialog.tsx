@@ -1,7 +1,7 @@
 import React from "react";
 import { X, Calendar, User, Tag, FileText, Database, Code } from "lucide-react";
 import { getActionColor } from "../hooks/useAuditLogs";
-import type { AuditLogEntry } from "../../../api/audit";
+import type { AuditLogEntry } from "../../../api/utils/audit";
 
 interface AuditViewDialogProps {
   isOpen: boolean;
@@ -32,13 +32,19 @@ export const AuditViewDialog: React.FC<AuditViewDialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black/50 transition-opacity"
+          onClick={onClose}
+        />
         <div className="relative bg-[var(--card-bg)] rounded-lg w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-xl">
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Audit Log Details #{log.id}
             </h2>
-            <button onClick={onClose} className="p-1 hover:bg-[var(--card-hover-bg)] rounded">
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-[var(--card-hover-bg)] rounded"
+            >
               <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
           </div>
@@ -47,20 +53,25 @@ export const AuditViewDialog: React.FC<AuditViewDialogProps> = ({
             <div className="space-y-4">
               {/* Basic Info */}
               <div className="bg-[var(--card-secondary-bg)] rounded-lg p-4 border border-[var(--border-color)]">
-                <h3 className="text-md font-semibold text-[var(--text-primary)] mb-3">Basic Information</h3>
+                <h3 className="text-md font-semibold text-[var(--text-primary)] mb-3">
+                  Basic Information
+                </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[var(--text-tertiary)] flex items-center gap-1">
                       <Calendar className="w-3 h-3" /> Timestamp
                     </p>
-                    <p className="text-[var(--text-primary)]">{new Date(log.timestamp).toLocaleString()}</p>
+                    <p className="text-[var(--text-primary)]">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </p>
                   </div>
                   <div>
                     <p className="text-[var(--text-tertiary)] flex items-center gap-1">
                       <User className="w-3 h-3" /> User
                     </p>
                     <p className="text-[var(--text-primary)]">
-                      {log.user || (log.userId ? `User #${log.userId}` : "System")}
+                      {log.user ||
+                        (log.userId ? `User #${log.userId}` : "System")}
                       {log.userType && ` (${log.userType})`}
                     </p>
                   </div>
@@ -111,7 +122,9 @@ export const AuditViewDialog: React.FC<AuditViewDialogProps> = ({
                     Old Data
                   </h3>
                   <pre className="text-xs text-[var(--text-secondary)] bg-[var(--background-color)] p-2 rounded overflow-auto max-h-60">
-                    {typeof oldData === 'string' ? oldData : JSON.stringify(oldData, null, 2)}
+                    {typeof oldData === "string"
+                      ? oldData
+                      : JSON.stringify(oldData, null, 2)}
                   </pre>
                 </div>
               )}
@@ -124,7 +137,9 @@ export const AuditViewDialog: React.FC<AuditViewDialogProps> = ({
                     New Data
                   </h3>
                   <pre className="text-xs text-[var(--text-secondary)] bg-[var(--background-color)] p-2 rounded overflow-auto max-h-60">
-                    {typeof newData === 'string' ? newData : JSON.stringify(newData, null, 2)}
+                    {typeof newData === "string"
+                      ? newData
+                      : JSON.stringify(newData, null, 2)}
                   </pre>
                 </div>
               )}
@@ -132,18 +147,28 @@ export const AuditViewDialog: React.FC<AuditViewDialogProps> = ({
               {/* Metadata */}
               {(log.ipAddress || log.userAgent) && (
                 <div className="bg-[var(--card-secondary-bg)] rounded-lg p-4 border border-[var(--border-color)]">
-                  <h3 className="text-md font-semibold text-[var(--text-primary)] mb-2">Metadata</h3>
+                  <h3 className="text-md font-semibold text-[var(--text-primary)] mb-2">
+                    Metadata
+                  </h3>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     {log.ipAddress && (
                       <>
-                        <p className="text-[var(--text-tertiary)]">IP Address</p>
-                        <p className="text-[var(--text-primary)]">{log.ipAddress}</p>
+                        <p className="text-[var(--text-tertiary)]">
+                          IP Address
+                        </p>
+                        <p className="text-[var(--text-primary)]">
+                          {log.ipAddress}
+                        </p>
                       </>
                     )}
                     {log.userAgent && (
                       <>
-                        <p className="text-[var(--text-tertiary)]">User Agent</p>
-                        <p className="text-[var(--text-primary)]">{log.userAgent}</p>
+                        <p className="text-[var(--text-tertiary)]">
+                          User Agent
+                        </p>
+                        <p className="text-[var(--text-primary)]">
+                          {log.userAgent}
+                        </p>
                       </>
                     )}
                   </div>

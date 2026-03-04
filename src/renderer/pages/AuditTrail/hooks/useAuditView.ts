@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import type { AuditLogEntry } from "../../../api/audit";
-import auditAPI from "../../../api/audit";
+import type { AuditLogEntry } from "../../../api/utils/audit";
+import auditAPI from "../../../api/utils/audit";
 
 export const useAuditView = () => {
   const [isOpen, setIsOpen] = useState(false);

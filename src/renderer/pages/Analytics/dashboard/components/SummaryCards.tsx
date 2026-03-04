@@ -7,7 +7,7 @@ import {
   AlertTriangle,
   Package,
 } from "lucide-react";
-import type { DashboardSummary } from "../../../../api/dashboard";
+import type { DashboardSummary } from "../../../../api/analytics/dashboard";
 import SummaryCard from "./SummaryCard";
 
 interface Props {

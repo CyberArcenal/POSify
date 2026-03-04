@@ -1,13 +1,14 @@
 // src/renderer/pages/purchase/components/PurchaseTable.tsx
 import React from "react";
 import { Eye, Edit, Trash2, ShoppingCart, Tag } from "lucide-react";
-import { type Purchase } from "../../../api/purchase";
+import { type Purchase } from "../../../api/utils/purchase";
 import Decimal from "decimal.js";
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const statusStyles = {
     pending: "bg-[var(--status-pending-bg)] text-[var(--status-pending)]",
-    approved: "bg-[var(--status-processing-bg)] text-[var(--status-processing)]",
+    approved:
+      "bg-[var(--status-processing-bg)] text-[var(--status-processing)]",
     completed: "bg-[var(--status-completed-bg)] text-[var(--status-completed)]",
     cancelled: "bg-[var(--status-cancelled-bg)] text-[var(--status-cancelled)]",
   };

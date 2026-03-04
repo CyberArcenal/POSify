@@ -1,18 +1,18 @@
 // src/renderer/pages/stock/hooks/useStockLevels.ts
-import { useState, useEffect, useCallback } from 'react';
-import productAPI, { type Product } from '../../../api/product';
-import supplierAPI, { type Supplier } from '../../../api/supplier';
-import categoryAPI, { type Category } from '../../../api/category';
+import { useState, useEffect, useCallback } from "react";
+import productAPI, { type Product } from "../../../api/utils/product";
+import supplierAPI, { type Supplier } from "../../../api/utils/supplier";
+import categoryAPI, { type Category } from "../../../api/utils/category";
 
 export interface StockFilters {
   search: string;
-  supplierId: number | '';
-  categoryId: number | '';
-  stockStatus: 'all' | 'instock' | 'lowstock' | 'outstock';
+  supplierId: number | "";
+  categoryId: number | "";
+  stockStatus: "all" | "instock" | "lowstock" | "outstock";
   page: number;
   limit: number;
   sortBy: string;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: "ASC" | "DESC";
 }
 
 export function useStockLevels(initialFilters?: Partial<StockFilters>) {
@@ -23,14 +23,14 @@ export function useStockLevels(initialFilters?: Partial<StockFilters>) {
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState<StockFilters>({
-    search: '',
-    supplierId: '',
-    categoryId: '',
-    stockStatus: 'all',
+    search: "",
+    supplierId: "",
+    categoryId: "",
+    stockStatus: "all",
     page: 1,
     limit: 10,
-    sortBy: 'name',
-    sortOrder: 'ASC',
+    sortBy: "name",
+    sortOrder: "ASC",
     ...initialFilters,
   });
 
@@ -55,8 +55,8 @@ export function useStockLevels(initialFilters?: Partial<StockFilters>) {
           setCategories(categoriesData);
         }
       } catch (err) {
-        console.error('Failed to fetch filter data', err);
-        setError('Failed to load suppliers and categories.');
+        console.error("Failed to fetch filter data", err);
+        setError("Failed to load suppliers and categories.");
       }
     };
     fetchFilterData();
@@ -78,21 +78,23 @@ export function useStockLevels(initialFilters?: Partial<StockFilters>) {
       if (response.status) {
         let fetchedProducts = response.data;
         // Apply stock status filter on frontend
-        if (filters.stockStatus !== 'all') {
-          fetchedProducts = fetchedProducts.filter(p => {
-            if (filters.stockStatus === 'instock') return p.stockQty > 5;
-            if (filters.stockStatus === 'lowstock') return p.stockQty > 0 && p.stockQty <= 5;
-            if (filters.stockStatus === 'outstock') return p.stockQty === 0;
+        if (filters.stockStatus !== "all") {
+          fetchedProducts = fetchedProducts.filter((p) => {
+            if (filters.stockStatus === "instock") return p.stockQty > 5;
+            if (filters.stockStatus === "lowstock")
+              return p.stockQty > 0 && p.stockQty <= 5;
+            if (filters.stockStatus === "outstock") return p.stockQty === 0;
             return true;
           });
         }
         setProducts(fetchedProducts);
         setTotal(fetchedProducts.length);
       } else {
-        throw new Error(response.message || 'Failed to fetch products');
+        throw new Error(response.message || "Failed to fetch products");
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to fetch products';
+      const message =
+        err instanceof Error ? err.message : "Failed to fetch products";
       setError(message);
     } finally {
       setLoading(false);

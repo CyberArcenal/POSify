@@ -1,24 +1,26 @@
 // src/renderer/pages/category/hooks/useCategoryForm.ts
-import { useState } from 'react';
-import { type Category } from '../../../api/category';
+import { useState } from "react";
+import { type Category } from "../../../api/utils/category";
 
-export type FormMode = 'add' | 'edit';
+export type FormMode = "add" | "edit";
 
 export function useCategoryForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<FormMode>('add');
+  const [mode, setMode] = useState<FormMode>("add");
   const [categoryId, setCategoryId] = useState<number | undefined>();
-  const [initialData, setInitialData] = useState<Partial<Category> | undefined>();
+  const [initialData, setInitialData] = useState<
+    Partial<Category> | undefined
+  >();
 
   const openAdd = () => {
-    setMode('add');
+    setMode("add");
     setCategoryId(undefined);
     setInitialData(undefined);
     setIsOpen(true);
   };
 
   const openEdit = (category: Category) => {
-    setMode('edit');
+    setMode("edit");
     setCategoryId(category.id);
     setInitialData(category);
     setIsOpen(true);
@@ -26,7 +28,7 @@ export function useCategoryForm() {
 
   const close = () => {
     setIsOpen(false);
-    setMode('add');
+    setMode("add");
     setCategoryId(undefined);
     setInitialData(undefined);
   };

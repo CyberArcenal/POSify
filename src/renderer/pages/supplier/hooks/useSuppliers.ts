@@ -1,25 +1,30 @@
 // src/renderer/pages/supplier/hooks/useSuppliers.ts
-import { useState, useEffect, useCallback } from 'react';
-import supplierAPI, { type Supplier, type SupplierWithProductCount } from '../../../api/supplier';
+import { useState, useEffect, useCallback } from "react";
+import supplierAPI, {
+  type Supplier,
+  type SupplierWithProductCount,
+} from "../../../api/utils/supplier";
 
 export interface SupplierFilters {
   search: string;
-  status: 'all' | 'active' | 'inactive';
+  status: "all" | "active" | "inactive";
   sortBy: string;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: "ASC" | "DESC";
 }
 
 export function useSuppliers(initialFilters?: Partial<SupplierFilters>) {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [productCounts, setProductCounts] = useState<Map<number, number>>(new Map());
+  const [productCounts, setProductCounts] = useState<Map<number, number>>(
+    new Map(),
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState<SupplierFilters>({
-    search: '',
-    status: 'all',
-    sortBy: 'name',
-    sortOrder: 'ASC',
+    search: "",
+    status: "all",
+    sortBy: "name",
+    sortOrder: "ASC",
     ...initialFilters,
   });
 
@@ -28,7 +33,8 @@ export function useSuppliers(initialFilters?: Partial<SupplierFilters>) {
     setError(null);
     try {
       // Convert status filter to isActive for API
-      const isActive = filters.status === 'all' ? undefined : filters.status === 'active';
+      const isActive =
+        filters.status === "all" ? undefined : filters.status === "active";
 
       const response = await supplierAPI.getAll({
         search: filters.search || undefined,
@@ -41,7 +47,7 @@ export function useSuppliers(initialFilters?: Partial<SupplierFilters>) {
         setSuppliers(response.data);
         setTotal(response.data.length); // Note: backend doesn't return total count yet
       } else {
-        throw new Error(response.message || 'Failed to fetch suppliers');
+        throw new Error(response.message || "Failed to fetch suppliers");
       }
 
       // Fetch product counts (active suppliers only)
@@ -54,7 +60,8 @@ export function useSuppliers(initialFilters?: Partial<SupplierFilters>) {
         setProductCounts(countsMap);
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to fetch suppliers';
+      const message =
+        err instanceof Error ? err.message : "Failed to fetch suppliers";
       setError(message);
     } finally {
       setLoading(false);

@@ -1,6 +1,6 @@
 // src/renderer/components/dashboard/LowStockTable.tsx
 import React from "react";
-import type { InventoryItem } from "../../../../api/dashboard";
+import type { InventoryItem } from "../../../../api/analytics/dashboard";
 
 interface Props {
   items: InventoryItem[];

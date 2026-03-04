@@ -1,7 +1,7 @@
-import React from 'react';
-import { X, Mail, AlertCircle, User, Hash, FileText } from 'lucide-react';
-import { formatDate } from '../../../utils/formatters';
-import type { NotificationLogEntry } from '../../../api/notification_log';
+import React from "react";
+import { X, Mail, AlertCircle, User, Hash, FileText } from "lucide-react";
+import { formatDate } from "../../../utils/formatters";
+import type { NotificationLogEntry } from "../../../api/utils/notification_log";
 
 interface NotificationViewDialogProps {
   log: NotificationLogEntry;
@@ -17,10 +17,10 @@ export const NotificationViewDialog: React.FC<NotificationViewDialogProps> = ({
   if (!isOpen) return null;
 
   const statusColors = {
-    queued: 'text-yellow-400',
-    sent: 'text-green-400',
-    failed: 'text-red-400',
-    resend: 'text-blue-400',
+    queued: "text-yellow-400",
+    sent: "text-green-400",
+    failed: "text-red-400",
+    resend: "text-blue-400",
   };
 
   return (
@@ -48,7 +48,9 @@ export const NotificationViewDialog: React.FC<NotificationViewDialogProps> = ({
         <div className="p-6 space-y-6">
           {/* Status Badge */}
           <div className="flex items-center justify-between">
-            <span className={`px-3 py-1.5 rounded-full text-xs font-medium border ${statusColors[log.status]}`}>
+            <span
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border ${statusColors[log.status]}`}
+            >
               {log.status.toUpperCase()}
             </span>
             <span className="text-sm text-[var(--text-tertiary)]">
@@ -56,13 +58,16 @@ export const NotificationViewDialog: React.FC<NotificationViewDialogProps> = ({
             </span>
           </div>
 
-          
           {/* Subject */}
           <div className="flex items-start gap-3">
             <Mail className="w-4 h-4 text-[var(--text-tertiary)] mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs text-[var(--text-tertiary)] uppercase">Subject</p>
-              <p className="text-[var(--text-primary)] font-medium">{log.subject || '(No subject)'}</p>
+              <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                Subject
+              </p>
+              <p className="text-[var(--text-primary)] font-medium">
+                {log.subject || "(No subject)"}
+              </p>
             </div>
           </div>
 
@@ -71,7 +76,9 @@ export const NotificationViewDialog: React.FC<NotificationViewDialogProps> = ({
             <div className="flex items-start gap-3">
               <FileText className="w-4 h-4 text-[var(--text-tertiary)] mt-0.5" />
               <div className="flex-1">
-                <p className="text-xs text-[var(--text-tertiary)] uppercase">Payload</p>
+                <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                  Payload
+                </p>
                 <pre className="mt-1 p-3 bg-[var(--card-secondary-bg)] rounded-lg text-xs text-[var(--text-secondary)] overflow-x-auto whitespace-pre-wrap">
                   {log.payload}
                 </pre>
@@ -93,32 +100,56 @@ export const NotificationViewDialog: React.FC<NotificationViewDialogProps> = ({
           {/* Metadata */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-[var(--border-color)]/10">
             <div>
-              <p className="text-xs text-[var(--text-tertiary)] uppercase">Created</p>
-              <p className="text-sm text-[var(--text-primary)]">{formatDate(log.created_at)}</p>
+              <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                Created
+              </p>
+              <p className="text-sm text-[var(--text-primary)]">
+                {formatDate(log.created_at)}
+              </p>
             </div>
             {log.sent_at && (
               <div>
-                <p className="text-xs text-[var(--text-tertiary)] uppercase">Sent</p>
-                <p className="text-sm text-[var(--text-primary)]">{formatDate(log.sent_at)}</p>
+                <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                  Sent
+                </p>
+                <p className="text-sm text-[var(--text-primary)]">
+                  {formatDate(log.sent_at)}
+                </p>
               </div>
             )}
             {log.last_error_at && (
               <div>
-                <p className="text-xs text-[var(--text-tertiary)] uppercase">Last Error</p>
-                <p className="text-sm text-[var(--text-primary)]">{formatDate(log.last_error_at)}</p>
+                <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                  Last Error
+                </p>
+                <p className="text-sm text-[var(--text-primary)]">
+                  {formatDate(log.last_error_at)}
+                </p>
               </div>
             )}
             <div>
-              <p className="text-xs text-[var(--text-tertiary)] uppercase">Retry Count</p>
-              <p className="text-sm text-[var(--text-primary)]">{log.retry_count}</p>
+              <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                Retry Count
+              </p>
+              <p className="text-sm text-[var(--text-primary)]">
+                {log.retry_count}
+              </p>
             </div>
             <div>
-              <p className="text-xs text-[var(--text-tertiary)] uppercase">Resend Count</p>
-              <p className="text-sm text-[var(--text-primary)]">{log.resend_count}</p>
+              <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                Resend Count
+              </p>
+              <p className="text-sm text-[var(--text-primary)]">
+                {log.resend_count}
+              </p>
             </div>
             <div>
-              <p className="text-xs text-[var(--text-tertiary)] uppercase">Updated</p>
-              <p className="text-sm text-[var(--text-primary)]">{formatDate(log.updated_at)}</p>
+              <p className="text-xs text-[var(--text-tertiary)] uppercase">
+                Updated
+              </p>
+              <p className="text-sm text-[var(--text-primary)]">
+                {formatDate(log.updated_at)}
+              </p>
             </div>
           </div>
         </div>

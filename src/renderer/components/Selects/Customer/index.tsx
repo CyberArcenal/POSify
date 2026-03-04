@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Search, ChevronDown, User, X, Star } from "lucide-react";
-import type { Customer } from "../../../api/customer";
-import customerAPI from "../../../api/customer";
+import type { Customer } from "../../../api/utils/customer";
+import customerAPI from "../../../api/utils/customer";
 
 interface CustomerSelectProps {
   value: number | null;
@@ -27,7 +27,11 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [dropdownStyle, setDropdownStyle] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownStyle, setDropdownStyle] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -67,8 +71,8 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
       customers.filter(
         (cust) =>
           cust.name.toLowerCase().includes(lower) ||
-          (cust.contactInfo && cust.contactInfo.toLowerCase().includes(lower))
-      )
+          (cust.contactInfo && cust.contactInfo.toLowerCase().includes(lower)),
+      ),
     );
   }, [searchTerm, customers]);
 
@@ -152,11 +156,16 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
           minHeight: "42px",
         }}
       >
-        <User className="w-4 h-4 flex-shrink-0" style={{ color: "var(--primary-color)" }} />
+        <User
+          className="w-4 h-4 flex-shrink-0"
+          style={{ color: "var(--primary-color)" }}
+        />
         <div className="flex-1 min-w-0 flex items-center gap-2">
           {selectedCustomer ? (
             <>
-              <span className="font-medium truncate">{selectedCustomer.name}</span>
+              <span className="font-medium truncate">
+                {selectedCustomer.name}
+              </span>
               {showLoyalty && selectedCustomer.loyaltyPointsBalance > 0 && (
                 <span
                   className="flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full"
@@ -170,13 +179,19 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
                 </span>
               )}
               {selectedCustomer.contactInfo && (
-                <span className="text-xs truncate hidden sm:inline" style={{ color: "var(--text-secondary)" }}>
+                <span
+                  className="text-xs truncate hidden sm:inline"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   ({selectedCustomer.contactInfo})
                 </span>
               )}
             </>
           ) : (
-            <span className="truncate" style={{ color: "var(--text-secondary)" }}>
+            <span
+              className="truncate"
+              style={{ color: "var(--text-secondary)" }}
+            >
               {placeholder}
             </span>
           )}
@@ -216,7 +231,10 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
             }}
           >
             {/* Search bar */}
-            <div className="p-2 border-b" style={{ borderColor: "var(--border-color)" }}>
+            <div
+              className="p-2 border-b"
+              style={{ borderColor: "var(--border-color)" }}
+            >
               <div className="relative">
                 <Search
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4"
@@ -241,11 +259,17 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
             {/* Customer list */}
             <div className="overflow-y-auto" style={{ maxHeight: "250px" }}>
               {loading && customers.length === 0 ? (
-                <div className="p-3 text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="p-3 text-center text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   Loading...
                 </div>
               ) : filteredCustomers.length === 0 ? (
-                <div className="p-3 text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="p-3 text-center text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   No customers found
                 </div>
               ) : (
@@ -261,10 +285,16 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
                     `}
                     style={{ borderBottom: "1px solid var(--border-color)" }}
                   >
-                    <User className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--primary-color)" }} />
+                    <User
+                      className="w-3.5 h-3.5 flex-shrink-0"
+                      style={{ color: "var(--primary-color)" }}
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium truncate" style={{ color: "var(--text-secondary)" }}>
+                        <span
+                          className="font-medium truncate"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
                           {customer.name}
                         </span>
                         {showLoyalty && customer.loyaltyPointsBalance > 0 && (
@@ -281,7 +311,10 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
                         )}
                       </div>
                       {customer.contactInfo && (
-                        <div className="text-xs truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>
+                        <div
+                          className="text-xs truncate mt-0.5"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
                           {customer.contactInfo}
                         </div>
                       )}
@@ -291,7 +324,7 @@ const CustomerSelect: React.FC<CustomerSelectProps> = ({
               )}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

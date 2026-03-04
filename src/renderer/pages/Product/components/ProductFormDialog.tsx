@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2, Save, Barcode } from "lucide-react";
-import productAPI from "../../../api/product";
+import productAPI from "../../../api/utils/product";
 import { dialogs } from "../../../utils/dialogs";
 import { type ProductFormData } from "../hooks/useProductForm";
 import CategorySelect from "../../../components/Selects/Category";
-import type { Category } from "../../../api/category";
+import type { Category } from "../../../api/utils/category";
 
 interface ProductFormDialogProps {
   isOpen: boolean;
@@ -97,7 +97,7 @@ export const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
             isActive: formData.isActive,
             categoryId: formData.categoryId || undefined,
           },
-          user
+          user,
         );
       }
 
@@ -188,7 +188,8 @@ export const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
               {/* Product Name */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
-                  Product Name <span className="text-[var(--accent-red)]">*</span>
+                  Product Name{" "}
+                  <span className="text-[var(--accent-red)]">*</span>
                 </label>
                 <input
                   type="text"
@@ -219,7 +220,7 @@ export const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
                   activeOnly
                   onChange={(
                     categoryId: number | null,
-                    category?: Category
+                    category?: Category,
                   ) => {
                     setFormData({
                       ...formData,

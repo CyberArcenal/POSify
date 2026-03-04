@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import inventoryAPI, { type InventoryMovement } from "../../../api/inventory";
+import inventoryAPI, {
+  type InventoryMovement,
+} from "../../../api/utils/inventory";
 
 export interface MovementFilters {
   movementType: "all" | "sale" | "refund" | "adjustment";

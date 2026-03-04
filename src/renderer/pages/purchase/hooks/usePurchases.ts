@@ -1,18 +1,18 @@
 // src/renderer/pages/purchase/hooks/usePurchases.ts
-import { useState, useEffect, useCallback } from 'react';
-import purchaseAPI, { type Purchase } from '../../../api/purchase';
-import supplierAPI, { type Supplier } from '../../../api/supplier';
+import { useState, useEffect, useCallback } from "react";
+import purchaseAPI, { type Purchase } from "../../../api/utils/purchase";
+import supplierAPI, { type Supplier } from "../../../api/utils/supplier";
 
 export interface PurchaseFilters {
   search: string;
   status: string;
-  supplierId: number | '';
+  supplierId: number | "";
   startDate: string;
   endDate: string;
   page: number;
   limit: number;
   sortBy: string;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: "ASC" | "DESC";
 }
 
 export function usePurchases(initialFilters?: Partial<PurchaseFilters>) {
@@ -22,15 +22,15 @@ export function usePurchases(initialFilters?: Partial<PurchaseFilters>) {
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState<PurchaseFilters>({
-    search: '',
-    status: '',
-    supplierId: '',
-    startDate: '',
-    endDate: '',
+    search: "",
+    status: "",
+    supplierId: "",
+    startDate: "",
+    endDate: "",
     page: 1,
     limit: 10,
-    sortBy: 'orderDate',
-    sortOrder: 'DESC',
+    sortBy: "orderDate",
+    sortOrder: "DESC",
     ...initialFilters,
   });
 
@@ -46,8 +46,8 @@ export function usePurchases(initialFilters?: Partial<PurchaseFilters>) {
           setSuppliers(suppliersData);
         }
       } catch (err) {
-        console.error('Failed to fetch suppliers', err);
-        setError('Failed to load suppliers.');
+        console.error("Failed to fetch suppliers", err);
+        setError("Failed to load suppliers.");
       }
     };
     fetchSuppliers();
@@ -70,15 +70,16 @@ export function usePurchases(initialFilters?: Partial<PurchaseFilters>) {
       const response = await purchaseAPI.getAll(params);
       if (response.status) {
         if (!Array.isArray(response.data)) {
-          throw new Error('Invalid data format');
+          throw new Error("Invalid data format");
         }
         setPurchases(response.data);
         setTotal(response.data.length);
       } else {
-        throw new Error(response.message || 'Failed to fetch purchases');
+        throw new Error(response.message || "Failed to fetch purchases");
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to fetch purchases';
+      const message =
+        err instanceof Error ? err.message : "Failed to fetch purchases";
       setError(message);
     } finally {
       setLoading(false);

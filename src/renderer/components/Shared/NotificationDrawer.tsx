@@ -10,7 +10,9 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { format } from "date-fns";
-import notificationAPI, { type Notification } from "../../api/notification";
+import notificationAPI, {
+  type Notification,
+} from "../../api/utils/notification";
 import { dialogs } from "../../utils/dialogs";
 
 interface NotificationDrawerProps {
@@ -86,7 +88,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       const response = await notificationAPI.markAsRead(id);
       if (response.status) {
         setNotifications((prev) =>
-          prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+          prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
         );
         setUnreadCount((prev) => Math.max(0, prev - 1));
       } else {
@@ -123,7 +125,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       if (response.status) {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
         // if it was unread, decrease count
-        const wasUnread = notifications.find((n) => n.id === id)?.isRead === false;
+        const wasUnread =
+          notifications.find((n) => n.id === id)?.isRead === false;
         if (wasUnread) setUnreadCount((prev) => Math.max(0, prev - 1));
       } else {
         throw new Error(response.message);
@@ -156,19 +159,29 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   const getTypeIcon = (type: Notification["type"]) => {
     switch (type) {
       case "success":
-        return <div className="w-2 h-2 rounded-full bg-[var(--accent-green)]" />;
+        return (
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-green)]" />
+        );
       case "warning":
-        return <div className="w-2 h-2 rounded-full bg-[var(--accent-amber)]" />;
+        return (
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-amber)]" />
+        );
       case "error":
         return <div className="w-2 h-2 rounded-full bg-[var(--accent-red)]" />;
       case "info":
         return <div className="w-2 h-2 rounded-full bg-[var(--accent-blue)]" />;
       case "purchase":
-        return <div className="w-2 h-2 rounded-full bg-[var(--accent-purple)]" />;
+        return (
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-purple)]" />
+        );
       case "sale":
-        return <div className="w-2 h-2 rounded-full bg-[var(--accent-green)]" />;
+        return (
+          <div className="w-2 h-2 rounded-full bg-[var(--accent-green)]" />
+        );
       default:
-        return <div className="w-2 h-2 rounded-full bg-[var(--text-tertiary)]" />;
+        return (
+          <div className="w-2 h-2 rounded-full bg-[var(--text-tertiary)]" />
+        );
     }
   };
 
@@ -301,7 +314,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                                   </>
                                 ) : (
                                   <>
-                                    Read more <ChevronDown className="w-3 h-3" />
+                                    Read more{" "}
+                                    <ChevronDown className="w-3 h-3" />
                                   </>
                                 )}
                               </button>
@@ -311,7 +325,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                           <p className="text-xs text-[var(--text-tertiary)] mt-2">
                             {format(
                               new Date(notification.createdAt),
-                              "MMM dd, yyyy • hh:mm a"
+                              "MMM dd, yyyy • hh:mm a",
                             )}
                           </p>
 

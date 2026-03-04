@@ -1,6 +1,6 @@
 // src/renderer/components/dashboard/TopProductsTable.tsx
 import React from "react";
-import type { TopProduct } from "../../../../api/dashboard";
+import type { TopProduct } from "../../../../api/analytics/dashboard";
 
 interface Props {
   products: TopProduct[];

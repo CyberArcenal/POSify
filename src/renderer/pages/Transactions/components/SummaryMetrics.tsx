@@ -1,13 +1,15 @@
 import React from "react";
 import Decimal from "decimal.js";
 import { format } from "date-fns";
-import type { Sale } from "../../../api/sale";
+import type { Sale } from "../../../api/utils/sale";
 
 interface SummaryMetricsProps {
   transactions: Sale[];
 }
 
-export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({ transactions }) => {
+export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({
+  transactions,
+}) => {
   const today = format(new Date(), "yyyy-MM-dd");
 
   const todayTransactions = transactions.filter((t) => {
@@ -20,7 +22,7 @@ export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({ transactions }) 
 
   const totalRevenue = todayTransactions.reduce(
     (sum, t) => sum.plus(t.totalAmount),
-    new Decimal(0)
+    new Decimal(0),
   );
 
   const avgValue =
@@ -39,7 +41,9 @@ export const SummaryMetrics: React.FC<SummaryMetricsProps> = ({ transactions }) 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-4">
-        <p className="text-sm text-[var(--text-tertiary)]">Today's Transactions</p>
+        <p className="text-sm text-[var(--text-tertiary)]">
+          Today's Transactions
+        </p>
         <p className="text-2xl font-bold text-[var(--text-primary)]">
           {todayTransactions.length}
         </p>

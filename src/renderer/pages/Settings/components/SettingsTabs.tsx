@@ -1,6 +1,6 @@
 // src/renderer/pages/Settings/components/SettingsTabs.tsx
 import React from "react";
-import { SettingType } from "../../../api/system_config";
+import { SettingType } from "../../../api/utils/system_config";
 
 const tabs: { id: SettingType; label: string }[] = [
   { id: "general", label: "General" },

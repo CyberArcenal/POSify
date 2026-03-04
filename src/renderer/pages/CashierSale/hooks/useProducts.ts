@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import productAPI, { type Product } from '../../../api/product';
-import { dialogs } from '../../../utils/dialogs';
+import { useState, useEffect, useCallback } from "react";
+import productAPI, { type Product } from "../../../api/utils/product";
+import { dialogs } from "../../../utils/dialogs";
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
@@ -25,10 +25,10 @@ export const useProducts = () => {
         setFilteredProducts([]);
       }
     } catch (error) {
-      console.error('Failed to load products', error);
+      console.error("Failed to load products", error);
       await dialogs.alert({
-        title: 'Error',
-        message: 'Could not load products. Please try again.',
+        title: "Error",
+        message: "Could not load products. Please try again.",
       });
     } finally {
       setLoadingProducts(false);
@@ -49,7 +49,7 @@ export const useProducts = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const clearFilters = () => {
-    setSearchTerm('');
+    setSearchTerm("");
     setCategoryId(null);
   };
 

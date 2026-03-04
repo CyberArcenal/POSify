@@ -1,25 +1,30 @@
 // src/renderer/pages/category/hooks/useCategories.ts
-import { useState, useEffect, useCallback } from 'react';
-import categoryAPI, { type Category, type CategoryWithProductCount } from '../../../api/category';
+import { useState, useEffect, useCallback } from "react";
+import categoryAPI, {
+  type Category,
+  type CategoryWithProductCount,
+} from "../../../api/utils/category";
 
 export interface CategoryFilters {
   search: string;
-  status: 'all' | 'active' | 'inactive';
+  status: "all" | "active" | "inactive";
   sortBy: string;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: "ASC" | "DESC";
 }
 
 export function useCategories(initialFilters?: Partial<CategoryFilters>) {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [productCounts, setProductCounts] = useState<Map<number, number>>(new Map());
+  const [productCounts, setProductCounts] = useState<Map<number, number>>(
+    new Map(),
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [filters, setFilters] = useState<CategoryFilters>({
-    search: '',
-    status: 'all',
-    sortBy: 'name',
-    sortOrder: 'ASC',
+    search: "",
+    status: "all",
+    sortBy: "name",
+    sortOrder: "ASC",
     ...initialFilters,
   });
 
@@ -27,7 +32,8 @@ export function useCategories(initialFilters?: Partial<CategoryFilters>) {
     setLoading(true);
     setError(null);
     try {
-      const isActive = filters.status === 'all' ? undefined : filters.status === 'active';
+      const isActive =
+        filters.status === "all" ? undefined : filters.status === "active";
 
       const response = await categoryAPI.getAll({
         search: filters.search || undefined,
@@ -46,7 +52,7 @@ export function useCategories(initialFilters?: Partial<CategoryFilters>) {
         if (Array.isArray(data)) {
           items = data;
           totalCount = data.length;
-        } else if (data && 'items' in data && 'total' in data) {
+        } else if (data && "items" in data && "total" in data) {
           items = data.items;
           totalCount = data.total;
         }
@@ -54,7 +60,7 @@ export function useCategories(initialFilters?: Partial<CategoryFilters>) {
         setCategories(items);
         setTotal(totalCount);
       } else {
-        throw new Error(response.message || 'Failed to fetch categories');
+        throw new Error(response.message || "Failed to fetch categories");
       }
 
       // Fetch product counts (active categories only)
@@ -67,7 +73,8 @@ export function useCategories(initialFilters?: Partial<CategoryFilters>) {
         setProductCounts(countsMap);
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to fetch categories';
+      const message =
+        err instanceof Error ? err.message : "Failed to fetch categories";
       setError(message);
     } finally {
       setLoading(false);

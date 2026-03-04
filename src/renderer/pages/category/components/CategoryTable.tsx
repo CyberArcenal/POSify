@@ -1,7 +1,7 @@
 // src/renderer/pages/category/components/CategoryTable.tsx
-import React from 'react';
-import { Eye, Edit, Trash2, Package, Check, X } from 'lucide-react';
-import type { Category } from '../../../api/category';
+import React from "react";
+import { Eye, Edit, Trash2, Package, Check, X } from "lucide-react";
+import type { Category } from "../../../api/utils/category";
 
 // ----------------------------------------------------------------------
 // Helper Components
@@ -44,7 +44,9 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
     return (
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-8 text-center">
         <Package className="w-12 h-12 mx-auto mb-3 text-[var(--text-tertiary)]" />
-        <p className="text-[var(--text-primary)] font-medium">No categories found</p>
+        <p className="text-[var(--text-primary)] font-medium">
+          No categories found
+        </p>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Try adjusting your filters or add a new category
         </p>
@@ -91,7 +93,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
                   {category.name}
                 </td>
                 <td className="w-2/5 px-4 py-3 text-sm text-[var(--text-secondary)] truncate">
-                  {category.description || '—'}
+                  {category.description || "—"}
                 </td>
                 <td className="w-1/6 px-4 py-3 text-right text-sm font-mono text-[var(--text-primary)]">
                   {productCounts.get(category.id) ?? 0}
@@ -102,21 +104,30 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
                 <td className="w-1/6 px-4 py-3">
                   <div className="flex items-center justify-center gap-2">
                     <button
-                      onClick={(e) => { e.stopPropagation(); onView(category); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onView(category);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-blue)]"
                       title="View Details"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onEdit(category); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(category);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-purple)]"
                       title="Edit"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onDelete(category); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(category);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-red)]"
                       title="Delete (Deactivate)"
                     >

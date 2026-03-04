@@ -1,12 +1,14 @@
 import React from "react";
 import { Award, TrendingUp, Users, RefreshCw } from "lucide-react";
-import type { LoyaltyStatisticsResponse } from "../../../api/loyalty";
+import type { LoyaltyStatisticsResponse } from "../../../api/utils/loyalty";
 
 interface LoyaltyOverviewProps {
   statistics: LoyaltyStatisticsResponse["data"];
 }
 
-export const LoyaltyOverview: React.FC<LoyaltyOverviewProps> = ({ statistics }) => {
+export const LoyaltyOverview: React.FC<LoyaltyOverviewProps> = ({
+  statistics,
+}) => {
   const cards = [
     {
       title: "Total Points Earned",
@@ -31,7 +33,9 @@ export const LoyaltyOverview: React.FC<LoyaltyOverviewProps> = ({ statistics }) 
     },
     {
       title: "Total Transactions",
-      value: (statistics.transactionCounts.earn + statistics.transactionCounts.redeem).toLocaleString(),
+      value: (
+        statistics.transactionCounts.earn + statistics.transactionCounts.redeem
+      ).toLocaleString(),
       icon: Users,
       color: "var(--accent-purple)",
       lightBg: "var(--accent-purple-light)",
@@ -50,8 +54,12 @@ export const LoyaltyOverview: React.FC<LoyaltyOverviewProps> = ({ statistics }) 
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium opacity-80 text-[var(--text-primary)]">{card.title}</p>
-                <p className="text-2xl font-bold mt-1 text-[var(--text-primary)]">{card.value}</p>
+                <p className="text-sm font-medium opacity-80 text-[var(--text-primary)]">
+                  {card.title}
+                </p>
+                <p className="text-2xl font-bold mt-1 text-[var(--text-primary)]">
+                  {card.value}
+                </p>
               </div>
               <div className="p-2 rounded-lg bg-black/10">
                 <Icon className="w-6 h-6" style={{ color: card.color }} />

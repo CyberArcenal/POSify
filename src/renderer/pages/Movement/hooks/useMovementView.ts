@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import { type InventoryMovement } from "../../../api/inventory";
-import inventoryAPI from "../../../api/inventory";
+import { type InventoryMovement } from "../../../api/utils/inventory";
+import inventoryAPI from "../../../api/utils/inventory";
 
 export const useMovementView = () => {
   const [isOpen, setIsOpen] = useState(false);

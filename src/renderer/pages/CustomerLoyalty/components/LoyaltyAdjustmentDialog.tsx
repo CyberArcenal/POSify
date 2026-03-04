@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X, Loader2, Search } from "lucide-react";
-import loyaltyAPI from "../../../api/loyalty";
-import customerAPI, { type Customer } from "../../../api/customer";
+import loyaltyAPI from "../../../api/utils/loyalty";
+import customerAPI, { type Customer } from "../../../api/utils/customer";
 import { dialogs } from "../../../utils/dialogs";
 
 interface LoyaltyAdjustmentDialogProps {
@@ -10,15 +10,15 @@ interface LoyaltyAdjustmentDialogProps {
   onSuccess: () => void;
 }
 
-export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = ({
-  isOpen,
-  onClose,
-  onSuccess,
-}) => {
+export const LoyaltyAdjustmentDialog: React.FC<
+  LoyaltyAdjustmentDialogProps
+> = ({ isOpen, onClose, onSuccess }) => {
   const [step, setStep] = useState<"select" | "adjust">("select");
   const [searchTerm, setSearchTerm] = useState("");
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
   const [points, setPoints] = useState<number>(0);
   const [type, setType] = useState<"earn" | "redeem">("earn");
   const [reason, setReason] = useState("");
@@ -52,7 +52,10 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
   const handleSubmit = async () => {
     if (!selectedCustomer) return;
     if (points <= 0) {
-      dialogs.alert({ title: "Error", message: "Points must be greater than 0." });
+      dialogs.alert({
+        title: "Error",
+        message: "Points must be greater than 0.",
+      });
       return;
     }
     if (!reason.trim()) {
@@ -70,7 +73,10 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
         user: "system",
       });
       if (response.status) {
-        dialogs.alert({ title: "Success", message: "Points adjusted successfully." });
+        dialogs.alert({
+          title: "Success",
+          message: "Points adjusted successfully.",
+        });
         onSuccess();
         reset();
       } else {
@@ -99,13 +105,19 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={reset} />
+        <div
+          className="fixed inset-0 bg-black/50 transition-opacity"
+          onClick={reset}
+        />
         <div className="relative bg-[var(--card-bg)] rounded-lg w-full max-w-md p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
               {step === "select" ? "Select Customer" : "Adjust Points"}
             </h2>
-            <button onClick={reset} className="p-1 hover:bg-[var(--card-hover-bg)] rounded">
+            <button
+              onClick={reset}
+              className="p-1 hover:bg-[var(--card-hover-bg)] rounded"
+            >
               <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
           </div>
@@ -126,7 +138,11 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
                   disabled={searchLoading}
                   className="p-2 bg-[var(--accent-blue)] text-white rounded-lg hover:bg-[var(--accent-blue-hover)] disabled:opacity-50"
                 >
-                  {searchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                  {searchLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Search className="w-4 h-4" />
+                  )}
                 </button>
               </div>
 
@@ -138,9 +154,15 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
                       onClick={() => handleSelectCustomer(c)}
                       className="p-3 hover:bg-[var(--card-hover-bg)] cursor-pointer"
                     >
-                      <p className="font-medium text-[var(--text-primary)]">{c.name}</p>
-                      <p className="text-sm text-[var(--text-tertiary)]">{c.contactInfo || "No contact"}</p>
-                      <p className="text-xs text-[var(--accent-purple)]">Points: {c.loyaltyPointsBalance}</p>
+                      <p className="font-medium text-[var(--text-primary)]">
+                        {c.name}
+                      </p>
+                      <p className="text-sm text-[var(--text-tertiary)]">
+                        {c.contactInfo || "No contact"}
+                      </p>
+                      <p className="text-xs text-[var(--accent-purple)]">
+                        Points: {c.loyaltyPointsBalance}
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -149,13 +171,21 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
           ) : (
             <div className="space-y-4">
               <div className="bg-[var(--card-secondary-bg)] p-3 rounded-lg border border-[var(--border-color)]">
-                <p className="text-sm text-[var(--text-tertiary)]">Selected Customer</p>
-                <p className="font-medium text-[var(--text-primary)]">{selectedCustomer?.name}</p>
-                <p className="text-xs text-[var(--accent-purple)]">Current Points: {selectedCustomer?.loyaltyPointsBalance}</p>
+                <p className="text-sm text-[var(--text-tertiary)]">
+                  Selected Customer
+                </p>
+                <p className="font-medium text-[var(--text-primary)]">
+                  {selectedCustomer?.name}
+                </p>
+                <p className="text-xs text-[var(--accent-purple)]">
+                  Current Points: {selectedCustomer?.loyaltyPointsBalance}
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Action</label>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
+                  Action
+                </label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2">
                     <input
@@ -165,7 +195,9 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
                       checked={type === "earn"}
                       onChange={() => setType("earn")}
                     />
-                    <span className="text-[var(--text-primary)]">Add Points</span>
+                    <span className="text-[var(--text-primary)]">
+                      Add Points
+                    </span>
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -175,7 +207,9 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
                       checked={type === "redeem"}
                       onChange={() => setType("redeem")}
                     />
-                    <span className="text-[var(--text-primary)]">Deduct Points</span>
+                    <span className="text-[var(--text-primary)]">
+                      Deduct Points
+                    </span>
                   </label>
                 </div>
               </div>
@@ -194,7 +228,9 @@ export const LoyaltyAdjustmentDialog: React.FC<LoyaltyAdjustmentDialogProps> = (
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Reason</label>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
+                  Reason
+                </label>
                 <input
                   type="text"
                   value={reason}

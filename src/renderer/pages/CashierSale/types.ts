@@ -1,5 +1,5 @@
-import { type Product as ApiProduct } from '../../api/product';
-import { type Customer as ApiCustomer } from '../../api/customer';
+import { type Product as ApiProduct } from "../../api/utils/product";
+import { type Customer as ApiCustomer } from "../../api/utils/customer";
 
 export type Product = ApiProduct;
 export type Customer = ApiCustomer;
@@ -7,7 +7,7 @@ export type Customer = ApiCustomer;
 export interface CartItem extends Product {
   cartQuantity: number;
   lineDiscount: number; // percentage
-  lineTax: number;      // percentage
+  lineTax: number; // percentage
 }
 
-export type PaymentMethod = 'cash' | 'card' | 'wallet';
+export type PaymentMethod = "cash" | "card" | "wallet";

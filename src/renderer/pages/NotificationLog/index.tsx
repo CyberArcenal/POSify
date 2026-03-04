@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Filter, RefreshCw } from 'lucide-react';
-import { useNotificationLogs } from './hooks/useNotificationLogs';
-import { NotificationSearch } from './components/NotificationSearch';
-import { NotificationFilterPanel } from './components/NotificationFilterPanel';
-import { NotificationStats } from './components/NotificationStats';
-import { NotificationTable } from './components/NotificationTable';
-import { NotificationViewDialog } from './Dialogs/NotificationViewDialog';
-import { dialogs } from '../../utils/dialogs';
-import notificationLogAPI from '../../api/notification_log';
-import { showSuccess, showError } from '../../utils/notification';
-import type { NotificationLogEntry } from '../../api/notification_log';
-import Pagination from '../../components/Shared/Pagination1';
+import React, { useState } from "react";
+import { Filter, RefreshCw } from "lucide-react";
+import { useNotificationLogs } from "./hooks/useNotificationLogs";
+import { NotificationSearch } from "./components/NotificationSearch";
+import { NotificationFilterPanel } from "./components/NotificationFilterPanel";
+import { NotificationStats } from "./components/NotificationStats";
+import { NotificationTable } from "./components/NotificationTable";
+import { NotificationViewDialog } from "./Dialogs/NotificationViewDialog";
+import { dialogs } from "../../utils/dialogs";
+import notificationLogAPI from "../../api/utils/notification_log";
+import { showSuccess, showError } from "../../utils/notification";
+import type { NotificationLogEntry } from "../../api/utils/notification_log";
+import Pagination from "../../components/Shared/Pagination1";
 
 const NotificationLogPage: React.FC = () => {
   const {
@@ -28,8 +28,10 @@ const NotificationLogPage: React.FC = () => {
   } = useNotificationLogs();
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLog, setSelectedLog] = useState<NotificationLogEntry | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLog, setSelectedLog] = useState<NotificationLogEntry | null>(
+    null,
+  );
   const [sendingRows, setSendingRows] = useState<Set<number>>(new Set());
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
@@ -45,7 +47,7 @@ const NotificationLogPage: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    setSearchQuery('');
+    setSearchQuery("");
     clearFilters();
   };
 
@@ -59,18 +61,17 @@ const NotificationLogPage: React.FC = () => {
   // 🔄 RETRY – with confirmation dialog
   // ------------------------------------------------------------------
   const handleRetry = async (id: number) => {
-    showSuccess('The notification has been queued for retry.');
+    showSuccess("The notification has been queued for retry.");
     setSendingRows((prev) => new Set(prev).add(id));
     try {
       const response = await notificationLogAPI.retryFailed(id);
       if (response.status) {
-        
         refetch();
       } else {
         throw new Error(response.message);
       }
     } catch (err: any) {
-      showError('Retry failed', err.message || 'Unable to retry notification');
+      showError("Retry failed", err.message || "Unable to retry notification");
     } finally {
       setSendingRows((prev) => {
         const next = new Set(prev);
@@ -83,11 +84,11 @@ const NotificationLogPage: React.FC = () => {
   const confirmRetry = (id: number) => {
     dialogs
       .confirm({
-        title: 'Retry Notification',
-        message: 'Are you sure you want to retry this failed notification?',
-        confirmText: 'Retry',
-        cancelText: 'Cancel',
-        icon: 'warning',
+        title: "Retry Notification",
+        message: "Are you sure you want to retry this failed notification?",
+        confirmText: "Retry",
+        cancelText: "Cancel",
+        icon: "warning",
       })
       .then((confirmed) => {
         if (confirmed) handleRetry(id);
@@ -98,18 +99,20 @@ const NotificationLogPage: React.FC = () => {
   // 🔄 RESEND – with confirmation dialog
   // ------------------------------------------------------------------
   const handleResend = async (id: number) => {
-    showSuccess('The notification has been resent.');
+    showSuccess("The notification has been resent.");
     setSendingRows((prev) => new Set(prev).add(id));
     try {
       const response = await notificationLogAPI.resend(id);
       if (response.status) {
-        
         refetch();
       } else {
         throw new Error(response.message);
       }
     } catch (err: any) {
-      showError('Resend failed', err.message || 'Unable to resend notification');
+      showError(
+        "Resend failed",
+        err.message || "Unable to resend notification",
+      );
     } finally {
       setSendingRows((prev) => {
         const next = new Set(prev);
@@ -122,11 +125,11 @@ const NotificationLogPage: React.FC = () => {
   const confirmResend = (id: number) => {
     dialogs
       .confirm({
-        title: 'Resend Notification',
-        message: 'Are you sure you want to resend this notification?',
-        confirmText: 'Resend',
-        cancelText: 'Cancel',
-        icon: 'info',
+        title: "Resend Notification",
+        message: "Are you sure you want to resend this notification?",
+        confirmText: "Resend",
+        cancelText: "Cancel",
+        icon: "info",
       })
       .then((confirmed) => {
         if (confirmed) handleResend(id);
@@ -140,13 +143,13 @@ const NotificationLogPage: React.FC = () => {
     try {
       const response = await notificationLogAPI.delete(id);
       if (response.status) {
-        dialogs.success('Deleted', `Notification #${id} has been deleted.`);
+        dialogs.success("Deleted", `Notification #${id} has been deleted.`);
         refetch();
       } else {
         throw new Error(response.message);
       }
     } catch (err: any) {
-      dialogs.error('Delete failed', err.message);
+      dialogs.error("Delete failed", err.message);
     }
   };
 
@@ -164,7 +167,9 @@ const NotificationLogPage: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Notification Logs</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">
+              Notification Logs
+            </h2>
             <p className="text-[var(--text-secondary)] mt-1">
               {pagination.total} total notifications
             </p>
@@ -198,7 +203,10 @@ const NotificationLogPage: React.FC = () => {
 
         {/* Search Bar */}
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <NotificationSearch value={searchQuery} onChange={handleSearchChange} />
+          <NotificationSearch
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
           {searchQuery && (
             <span className="text-sm text-[var(--text-secondary)]">
               Searching: “{searchQuery}”
@@ -236,9 +244,9 @@ const NotificationLogPage: React.FC = () => {
           <NotificationTable
             logs={logs}
             onView={handleView}
-            onRetry={confirmRetry}      // ← confirmation then action
-            onResend={confirmResend}    // ← confirmation then action
-            onDelete={confirmDelete}    // ← confirmation then action
+            onRetry={confirmRetry} // ← confirmation then action
+            onResend={confirmResend} // ← confirmation then action
+            onDelete={confirmDelete} // ← confirmation then action
             isLoading={loading}
             sendingIds={sendingRows}
           />

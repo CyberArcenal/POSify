@@ -10,8 +10,9 @@ import {
 } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import notificationAPI from "../../api/notification";
+import notificationAPI from "../../api/utils/notification";
 import { NotificationDrawer } from "./NotificationDrawer";
+import UpdateNotifier from "./UpdateNotifier";
 
 interface RouteInfo {
   path: string;
@@ -33,7 +34,6 @@ const TopBar: React.FC<TopBarProps> = ({ toggleSidebar }) => {
 
   // Fetch unread count periodically
   useEffect(() => {
-
     const fetchUnread = async () => {
       try {
         const response = await notificationAPI.getUnreadCount();
@@ -324,6 +324,7 @@ const TopBar: React.FC<TopBarProps> = ({ toggleSidebar }) => {
 
       {/* Right Section - Actions & Profile */}
       <div className="flex items-center gap-3">
+        <UpdateNotifier /> 
         {/* Notification bell */}
         <button
           onClick={() => setNotificationsOpen(true)}

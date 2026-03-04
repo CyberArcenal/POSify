@@ -1,9 +1,17 @@
 // src/renderer/components/Selects/Supplier/index.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { Search, ChevronDown, Loader, Truck, X, Phone, MapPin } from "lucide-react";
-import type { Supplier } from "../../../api/supplier";
-import supplierAPI from "../../../api/supplier";
+import {
+  Search,
+  ChevronDown,
+  Loader,
+  Truck,
+  X,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import type { Supplier } from "../../../api/utils/supplier";
+import supplierAPI from "../../../api/utils/supplier";
 
 interface SupplierSelectProps {
   value: number | null;
@@ -30,7 +38,11 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
-  const [dropdownStyle, setDropdownStyle] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownStyle, setDropdownStyle] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -66,8 +78,12 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
             totalItems = newSuppliers.length;
           }
 
-          setSuppliers((prev) => (reset ? newSuppliers : [...prev, ...newSuppliers]));
-          setFiltered((prev) => (reset ? newSuppliers : [...prev, ...newSuppliers]));
+          setSuppliers((prev) =>
+            reset ? newSuppliers : [...prev, ...newSuppliers],
+          );
+          setFiltered((prev) =>
+            reset ? newSuppliers : [...prev, ...newSuppliers],
+          );
           setPage(currentPage + 1);
           setHasMore(currentPage < totalPages);
           setTotal(totalItems);
@@ -78,7 +94,7 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
         setLoading(false);
       }
     },
-    [page, loading, activeOnly]
+    [page, loading, activeOnly],
   );
 
   // Debounced search
@@ -195,7 +211,10 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
         <div className="flex items-center gap-2 truncate">
           {selectedSupplier ? (
             <>
-              <Truck className="w-4 h-4" style={{ color: "var(--primary-color)" }} />
+              <Truck
+                className="w-4 h-4"
+                style={{ color: "var(--primary-color)" }}
+              />
               <div className="truncate">
                 <div className="font-medium flex items-center gap-2">
                   {selectedSupplier.name}
@@ -205,20 +224,31 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                       backgroundColor: selectedSupplier.isActive
                         ? "var(--status-completed-bg)"
                         : "var(--status-cancelled-bg)",
-                      color: selectedSupplier.isActive ? "var(--status-completed)" : "var(--status-cancelled)",
+                      color: selectedSupplier.isActive
+                        ? "var(--status-completed)"
+                        : "var(--status-cancelled)",
                     }}
                   >
                     {selectedSupplier.isActive ? "Active" : "Inactive"}
                   </span>
                 </div>
-                <div className="text-xs flex gap-2" style={{ color: "var(--text-secondary)" }}>
-                  {selectedSupplier.contactInfo && <span>{selectedSupplier.contactInfo}</span>}
-                  {selectedSupplier.address && <span>• {selectedSupplier.address}</span>}
+                <div
+                  className="text-xs flex gap-2"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {selectedSupplier.contactInfo && (
+                    <span>{selectedSupplier.contactInfo}</span>
+                  )}
+                  {selectedSupplier.address && (
+                    <span>• {selectedSupplier.address}</span>
+                  )}
                 </div>
               </div>
             </>
           ) : (
-            <span style={{ color: "var(--text-secondary)" }}>{placeholder}</span>
+            <span style={{ color: "var(--text-secondary)" }}>
+              {placeholder}
+            </span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -258,11 +288,20 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
             }}
           >
             {/* Search header */}
-            <div className="p-3 border-b" style={{ borderColor: "var(--border-color)" }}>
+            <div
+              className="p-3 border-b"
+              style={{ borderColor: "var(--border-color)" }}
+            >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <Search className="w-4 h-4" style={{ color: "var(--text-secondary)" }} />
-                  <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                  <Search
+                    className="w-4 h-4"
+                    style={{ color: "var(--text-secondary)" }}
+                  />
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: "var(--text-primary)" }}
+                  >
                     Find supplier
                   </span>
                 </div>
@@ -299,7 +338,10 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                 )}
               </div>
               {total > 0 && (
-                <div className="text-xs mt-2" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="text-xs mt-2"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   {total} supplier{total !== 1 ? "s" : ""} total
                 </div>
               )}
@@ -311,7 +353,9 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
               style={{ maxHeight: "250px" }}
               onScroll={(e) => {
                 const target = e.target as HTMLDivElement;
-                const bottom = target.scrollHeight - target.scrollTop === target.clientHeight;
+                const bottom =
+                  target.scrollHeight - target.scrollTop ===
+                  target.clientHeight;
                 if (bottom && hasMore && !loading) {
                   handleLoadMore();
                 }
@@ -320,9 +364,15 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
               {filtered.length === 0 ? (
                 <div className="p-4 text-center">
                   {loading ? (
-                    <Loader className="w-5 h-5 animate-spin mx-auto" style={{ color: "var(--primary-color)" }} />
+                    <Loader
+                      className="w-5 h-5 animate-spin mx-auto"
+                      style={{ color: "var(--primary-color)" }}
+                    />
                   ) : (
-                    <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                    <div
+                      className="text-sm"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
                       No suppliers found
                     </div>
                   )}
@@ -339,7 +389,10 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                         hover:bg-gray-800
                         ${sup.id === value ? "bg-gray-800" : ""}
                       `}
-                      style={{ borderBottom: "1px solid var(--border-color)", color: "var(--text-primary)" }}
+                      style={{
+                        borderBottom: "1px solid var(--border-color)",
+                        color: "var(--text-primary)",
+                      }}
                     >
                       {/* Selection indicator */}
                       <div
@@ -348,10 +401,15 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                           ${sup.id === value ? "border-primary" : "border-gray-600"}
                         `}
                       >
-                        {sup.id === value && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                        {sup.id === value && (
+                          <div className="w-2 h-2 rounded-full bg-white"></div>
+                        )}
                       </div>
 
-                      <Truck className="w-4 h-4 flex-shrink-0 mt-1" style={{ color: "var(--primary-color)" }} />
+                      <Truck
+                        className="w-4 h-4 flex-shrink-0 mt-1"
+                        style={{ color: "var(--primary-color)" }}
+                      />
 
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-sm flex items-center gap-2">
@@ -362,7 +420,9 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                               backgroundColor: sup.isActive
                                 ? "var(--status-completed-bg)"
                                 : "var(--status-cancelled-bg)",
-                              color: sup.isActive ? "var(--status-completed)" : "var(--status-cancelled)",
+                              color: sup.isActive
+                                ? "var(--status-completed)"
+                                : "var(--status-cancelled)",
                             }}
                           >
                             {sup.isActive ? "Active" : "Inactive"}
@@ -370,12 +430,18 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
                         </div>
                         <div className="text-xs mt-0.5 space-y-0.5">
                           {sup.contactInfo && (
-                            <div className="flex items-center gap-1" style={{ color: "var(--text-secondary)" }}>
+                            <div
+                              className="flex items-center gap-1"
+                              style={{ color: "var(--text-secondary)" }}
+                            >
                               <Phone className="w-3 h-3" /> {sup.contactInfo}
                             </div>
                           )}
                           {sup.address && (
-                            <div className="flex items-center gap-1" style={{ color: "var(--text-secondary)" }}>
+                            <div
+                              className="flex items-center gap-1"
+                              style={{ color: "var(--text-secondary)" }}
+                            >
                               <MapPin className="w-3 h-3" /> {sup.address}
                             </div>
                           )}
@@ -403,7 +469,7 @@ const SupplierSelect: React.FC<SupplierSelectProps> = ({
               )}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

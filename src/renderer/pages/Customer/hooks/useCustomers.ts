@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import customerAPI, { type Customer } from "../../../api/customer";
+import customerAPI, { type Customer } from "../../../api/utils/customer";
 // import { saleAPI } from "../../../api/sale"; // kung nasa sale.ts
 
 export interface CustomerFilters {
@@ -51,7 +51,7 @@ export const useCustomers = (initialFilters: CustomerFilters) => {
         // Apply client‑side status filter
         if (filters.status !== "all") {
           fetchedCustomers = fetchedCustomers.filter(
-            (c) => c.status === filters.status
+            (c) => c.status === filters.status,
           );
         }
 
@@ -63,17 +63,19 @@ export const useCustomers = (initialFilters: CustomerFilters) => {
         const metrics: Metrics = {
           total: fetchedCustomers.length,
           vipCount: fetchedCustomers.filter((c) => c.status === "vip").length,
-          eliteCount: fetchedCustomers.filter((c) => c.status === "elite").length,
-          regularCount: fetchedCustomers.filter((c) => c.status === "regular").length,
+          eliteCount: fetchedCustomers.filter((c) => c.status === "elite")
+            .length,
+          regularCount: fetchedCustomers.filter((c) => c.status === "regular")
+            .length,
           newThisMonth: fetchedCustomers.filter(
-            (c) => new Date(c.createdAt) >= firstDayOfMonth
+            (c) => new Date(c.createdAt) >= firstDayOfMonth,
           ).length,
         };
         setMetrics(metrics);
 
         // Fetch total spent for all customers in batch
         if (fetchedCustomers.length > 0) {
-          const ids = fetchedCustomers.map(c => c.id);
+          const ids = fetchedCustomers.map((c) => c.id);
           // Gamitin ang bagong method (kung nasa customerAPI)
           const totals = await customerAPI.getTotalSpentForCustomers(ids);
           setTotalsMap(totals);

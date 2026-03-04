@@ -1,10 +1,10 @@
 // src/renderer/pages/supplier/components/SupplierViewDialog.tsx
-import React, { useState } from 'react';
-import { X, Package, ShoppingCart, Info, Loader2 } from 'lucide-react';
-import type { Supplier } from '../../../api/supplier';
-import type { Product } from '../../../api/product';
-import type { Purchase } from '../../../api/purchase';
-import Decimal from 'decimal.js';
+import React, { useState } from "react";
+import { X, Package, ShoppingCart, Info, Loader2 } from "lucide-react";
+import type { Supplier } from "../../../api/utils/supplier";
+import type { Product } from "../../../api/utils/product";
+import type { Purchase } from "../../../api/utils/purchase";
+import Decimal from "decimal.js";
 
 interface SupplierViewDialogProps {
   supplier: Supplier | null;
@@ -20,7 +20,7 @@ interface SupplierViewDialogProps {
   onClose: () => void;
 }
 
-type Tab = 'info' | 'products' | 'purchases';
+type Tab = "info" | "products" | "purchases";
 
 export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
   supplier,
@@ -31,7 +31,7 @@ export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState<Tab>('info');
+  const [activeTab, setActiveTab] = useState<Tab>("info");
 
   if (!isOpen || !supplier) return null;
 
@@ -55,33 +55,33 @@ export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
           {/* Tabs */}
           <div className="flex border-b border-[var(--border-color)] mb-4">
             <button
-              onClick={() => setActiveTab('info')}
+              onClick={() => setActiveTab("info")}
               className={`px-4 py-2 text-sm font-medium ${
-                activeTab === 'info'
-                  ? 'text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]'
-                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                activeTab === "info"
+                  ? "text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Info className="w-4 h-4 inline mr-1" />
               Basic Info
             </button>
             <button
-              onClick={() => setActiveTab('products')}
+              onClick={() => setActiveTab("products")}
               className={`px-4 py-2 text-sm font-medium ${
-                activeTab === 'products'
-                  ? 'text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]'
-                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                activeTab === "products"
+                  ? "text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Package className="w-4 h-4 inline mr-1" />
               Products ({products.length})
             </button>
             <button
-              onClick={() => setActiveTab('purchases')}
+              onClick={() => setActiveTab("purchases")}
               className={`px-4 py-2 text-sm font-medium ${
-                activeTab === 'purchases'
-                  ? 'text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]'
-                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                activeTab === "purchases"
+                  ? "text-[var(--accent-blue)] border-b-2 border-[var(--accent-blue)]"
+                  : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <ShoppingCart className="w-4 h-4 inline mr-1" />
@@ -97,50 +97,76 @@ export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
               </div>
             ) : (
               <>
-                {activeTab === 'info' && (
+                {activeTab === "info" && (
                   <div className="space-y-4">
                     {/* Basic info grid: 2 columns */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
-                        <p className="text-sm text-[var(--text-tertiary)]">Name</p>
-                        <p className="text-lg font-semibold text-[var(--text-primary)]">{supplier.name}</p>
-                      </div>
-                      <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
-                        <p className="text-sm text-[var(--text-tertiary)]">Status</p>
-                        <p className={`text-lg font-semibold ${supplier.isActive ? 'text-[var(--status-completed)]' : 'text-[var(--status-cancelled)]'}`}>
-                          {supplier.isActive ? 'Active' : 'Inactive'}
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Name
+                        </p>
+                        <p className="text-lg font-semibold text-[var(--text-primary)]">
+                          {supplier.name}
                         </p>
                       </div>
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
-                        <p className="text-sm text-[var(--text-tertiary)]">Email</p>
-                        <p className="text-[var(--text-primary)]">{supplier.email || '—'}</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Status
+                        </p>
+                        <p
+                          className={`text-lg font-semibold ${supplier.isActive ? "text-[var(--status-completed)]" : "text-[var(--status-cancelled)]"}`}
+                        >
+                          {supplier.isActive ? "Active" : "Inactive"}
+                        </p>
                       </div>
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
-                        <p className="text-sm text-[var(--text-tertiary)]">Phone</p>
-                        <p className="text-[var(--text-primary)]">{supplier.phone || '—'}</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Email
+                        </p>
+                        <p className="text-[var(--text-primary)]">
+                          {supplier.email || "—"}
+                        </p>
+                      </div>
+                      <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Phone
+                        </p>
+                        <p className="text-[var(--text-primary)]">
+                          {supplier.phone || "—"}
+                        </p>
                       </div>
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg col-span-2">
-                        <p className="text-sm text-[var(--text-tertiary)]">Address</p>
-                        <p className="text-[var(--text-primary)]">{supplier.address || '—'}</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Address
+                        </p>
+                        <p className="text-[var(--text-primary)]">
+                          {supplier.address || "—"}
+                        </p>
                       </div>
                     </div>
 
                     {/* Metrics Cards */}
                     <div className="grid grid-cols-3 gap-4 mt-6">
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg text-center">
-                        <p className="text-sm text-[var(--text-tertiary)]">Total Spent</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Total Spent
+                        </p>
                         <p className="text-2xl font-bold text-[var(--accent-green)]">
                           ₱{new Decimal(metrics.totalSpent).toFixed(2)}
                         </p>
                       </div>
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg text-center">
-                        <p className="text-sm text-[var(--text-tertiary)]">Completed Orders</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Completed Orders
+                        </p>
                         <p className="text-2xl font-bold text-[var(--accent-blue)]">
                           {metrics.purchaseCount}
                         </p>
                       </div>
                       <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg text-center">
-                        <p className="text-sm text-[var(--text-tertiary)]">Avg. Order Value</p>
+                        <p className="text-sm text-[var(--text-tertiary)]">
+                          Avg. Order Value
+                        </p>
                         <p className="text-2xl font-bold text-[var(--accent-purple)]">
                           ₱{new Decimal(metrics.averageOrderValue).toFixed(2)}
                         </p>
@@ -149,27 +175,45 @@ export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
                   </div>
                 )}
 
-                {activeTab === 'products' && (
+                {activeTab === "products" && (
                   <div>
                     {products.length === 0 ? (
-                      <p className="text-center text-[var(--text-tertiary)] py-8">No products linked to this supplier.</p>
+                      <p className="text-center text-[var(--text-tertiary)] py-8">
+                        No products linked to this supplier.
+                      </p>
                     ) : (
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-[var(--border-color)]">
-                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">SKU</th>
-                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">Name</th>
-                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">Price</th>
-                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">Stock</th>
+                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              SKU
+                            </th>
+                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Name
+                            </th>
+                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Price
+                            </th>
+                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Stock
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--border-color)]">
                           {products.map((product) => (
                             <tr key={product.id}>
-                              <td className="py-2 text-sm font-mono text-[var(--text-primary)]">{product.sku}</td>
-                              <td className="py-2 text-sm text-[var(--text-secondary)]">{product.name}</td>
-                              <td className="py-2 text-right text-sm text-[var(--accent-green)]">₱{new Decimal(product.price).toFixed(2)}</td>
-                              <td className="py-2 text-right text-sm text-[var(--text-primary)]">{product.stockQty}</td>
+                              <td className="py-2 text-sm font-mono text-[var(--text-primary)]">
+                                {product.sku}
+                              </td>
+                              <td className="py-2 text-sm text-[var(--text-secondary)]">
+                                {product.name}
+                              </td>
+                              <td className="py-2 text-right text-sm text-[var(--accent-green)]">
+                                ₱{new Decimal(product.price).toFixed(2)}
+                              </td>
+                              <td className="py-2 text-right text-sm text-[var(--text-primary)]">
+                                {product.stockQty}
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -178,34 +222,58 @@ export const SupplierViewDialog: React.FC<SupplierViewDialogProps> = ({
                   </div>
                 )}
 
-                {activeTab === 'purchases' && (
+                {activeTab === "purchases" && (
                   <div>
                     {purchases.length === 0 ? (
-                      <p className="text-center text-[var(--text-tertiary)] py-8">No purchase history for this supplier.</p>
+                      <p className="text-center text-[var(--text-tertiary)] py-8">
+                        No purchase history for this supplier.
+                      </p>
                     ) : (
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-[var(--border-color)]">
-                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">Ref #</th>
-                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">Date</th>
-                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">Status</th>
-                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">Total</th>
+                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Ref #
+                            </th>
+                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Date
+                            </th>
+                            <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Status
+                            </th>
+                            <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                              Total
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--border-color)]">
                           {purchases.map((purchase) => (
                             <tr key={purchase.id}>
-                              <td className="py-2 text-sm font-mono text-[var(--text-primary)]">{purchase.referenceNo || '—'}</td>
-                              <td className="py-2 text-sm text-[var(--text-secondary)]">{new Date(purchase.orderDate).toLocaleDateString()}</td>
+                              <td className="py-2 text-sm font-mono text-[var(--text-primary)]">
+                                {purchase.referenceNo || "—"}
+                              </td>
+                              <td className="py-2 text-sm text-[var(--text-secondary)]">
+                                {new Date(
+                                  purchase.orderDate,
+                                ).toLocaleDateString()}
+                              </td>
                               <td className="py-2 text-sm">
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium
-                                  ${purchase.status === 'completed' ? 'bg-[var(--status-completed-bg)] text-[var(--status-completed)]' :
-                                    purchase.status === 'pending' ? 'bg-[var(--status-pending-bg)] text-[var(--status-pending)]' :
-                                    'bg-[var(--status-cancelled-bg)] text-[var(--status-cancelled)]'}`}>
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs font-medium
+                                  ${
+                                    purchase.status === "completed"
+                                      ? "bg-[var(--status-completed-bg)] text-[var(--status-completed)]"
+                                      : purchase.status === "pending"
+                                        ? "bg-[var(--status-pending-bg)] text-[var(--status-pending)]"
+                                        : "bg-[var(--status-cancelled-bg)] text-[var(--status-cancelled)]"
+                                  }`}
+                                >
                                   {purchase.status}
                                 </span>
                               </td>
-                              <td className="py-2 text-right text-sm text-[var(--accent-green)]">₱{new Decimal(purchase.totalAmount).toFixed(2)}</td>
+                              <td className="py-2 text-right text-sm text-[var(--accent-green)]">
+                                ₱{new Decimal(purchase.totalAmount).toFixed(2)}
+                              </td>
                             </tr>
                           ))}
                         </tbody>

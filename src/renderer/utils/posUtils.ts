@@ -1,4 +1,4 @@
-import type { Sale } from "../api/sale";
+import type { Sale } from "../api/utils/sale";
 import { useSettings } from "../contexts/SettingsContext";
 
 // ============================================================================

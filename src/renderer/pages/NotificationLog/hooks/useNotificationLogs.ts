@@ -1,6 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { NotificationLogEntry, NotificationStats, PaginatedNotifications } from '../../../api/notification_log';
-import notificationLogAPI from '../../../api/notification_log';
+import { useState, useEffect, useCallback } from "react";
+import type {
+  NotificationLogEntry,
+  NotificationStats,
+  PaginatedNotifications,
+} from "../../../api/utils/notification_log";
+import notificationLogAPI from "../../../api/utils/notification_log";
 
 interface UseNotificationLogsParams {
   page?: number;
@@ -10,12 +14,16 @@ interface UseNotificationLogsParams {
   endDate?: string;
   keyword?: string;
   sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
+  sortOrder?: "ASC" | "DESC";
 }
 
-export const useNotificationLogs = (initialParams?: UseNotificationLogsParams) => {
+export const useNotificationLogs = (
+  initialParams?: UseNotificationLogsParams,
+) => {
   const [logs, setLogs] = useState<NotificationLogEntry[]>([]);
-  const [pagination, setPagination] = useState<Omit<PaginatedNotifications, 'items'>>({
+  const [pagination, setPagination] = useState<
+    Omit<PaginatedNotifications, "items">
+  >({
     total: 0,
     page: 1,
     limit: 10,
@@ -27,8 +35,8 @@ export const useNotificationLogs = (initialParams?: UseNotificationLogsParams) =
   const [filters, setFilters] = useState<UseNotificationLogsParams>({
     page: 1,
     limit: 10,
-    sortBy: 'created_at',
-    sortOrder: 'DESC',
+    sortBy: "created_at",
+    sortOrder: "DESC",
     ...initialParams,
   });
 
@@ -67,7 +75,7 @@ export const useNotificationLogs = (initialParams?: UseNotificationLogsParams) =
         throw new Error(response.message);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch notification logs');
+      setError(err.message || "Failed to fetch notification logs");
     } finally {
       setLoading(false);
     }
@@ -80,7 +88,7 @@ export const useNotificationLogs = (initialParams?: UseNotificationLogsParams) =
         setStats(response.data);
       }
     } catch (err) {
-      console.error('Failed to fetch stats', err);
+      console.error("Failed to fetch stats", err);
     }
   }, []);
 
@@ -89,16 +97,19 @@ export const useNotificationLogs = (initialParams?: UseNotificationLogsParams) =
     fetchStats();
   }, [fetchLogs, fetchStats]);
 
-  const updateFilters = useCallback((newFilters: Partial<UseNotificationLogsParams>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 })); // reset to first page
-  }, []);
+  const updateFilters = useCallback(
+    (newFilters: Partial<UseNotificationLogsParams>) => {
+      setFilters((prev) => ({ ...prev, ...newFilters, page: 1 })); // reset to first page
+    },
+    [],
+  );
 
   const clearFilters = useCallback(() => {
     setFilters({
       page: 1,
       limit: 10,
-      sortBy: 'created_at',
-      sortOrder: 'DESC',
+      sortBy: "created_at",
+      sortOrder: "DESC",
     });
   }, []);
 

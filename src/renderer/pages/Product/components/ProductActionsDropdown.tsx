@@ -6,7 +6,7 @@ import {
   ArrowUpDown,
   PackageMinus,
 } from "lucide-react";
-import type { Product } from "../../../api/product";
+import type { Product } from "../../../api/utils/product";
 
 interface ProductActionsDropdownProps {
   product: Product;
@@ -58,9 +58,15 @@ const ProductActionsDropdown: React.FC<ProductActionsDropdownProps> = ({
     const dropdownHeight = 120; // approx height of three items
     const windowHeight = window.innerHeight;
     if (rect.bottom + dropdownHeight > windowHeight) {
-      return { bottom: `${windowHeight - rect.top + 5}px`, right: `${window.innerWidth - rect.right}px` };
+      return {
+        bottom: `${windowHeight - rect.top + 5}px`,
+        right: `${window.innerWidth - rect.right}px`,
+      };
     }
-    return { top: `${rect.bottom + 5}px`, right: `${window.innerWidth - rect.right}px` };
+    return {
+      top: `${rect.bottom + 5}px`,
+      right: `${window.innerWidth - rect.right}px`,
+    };
   };
 
   return (

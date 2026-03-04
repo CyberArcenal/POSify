@@ -1,6 +1,6 @@
 // src/renderer/components/dashboard/SalesChart.tsx
 import React from "react";
-import type { SalesChartPoint } from "../../../../api/dashboard";
+import type { SalesChartPoint } from "../../../../api/analytics/dashboard";
 
 interface Props {
   data: SalesChartPoint[];

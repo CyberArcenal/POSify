@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import type { IntegrationsSettings, WebhookSetting } from "../../../api/system_config";
+import type {
+  IntegrationsSettings,
+  WebhookSetting,
+} from "../../../api/utils/system_config";
 
 interface Props {
   settings: IntegrationsSettings;
@@ -23,7 +26,11 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
     return Array.isArray(settings.webhooks) ? settings.webhooks : [];
   });
 
-  const handleWebhookChange = (index: number, field: keyof WebhookSetting, value: any) => {
+  const handleWebhookChange = (
+    index: number,
+    field: keyof WebhookSetting,
+    value: any,
+  ) => {
     const updated = [...webhooks];
     updated[index] = { ...updated[index], [field]: value };
     setWebhooks(updated);
@@ -51,7 +58,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
   // Determine if the selected provider is "other" or a custom value not in the list
   const isOtherProvider =
     settings.payment_gateway_provider &&
-    !PAYMENT_PROVIDERS.some(p => p.value === settings.payment_gateway_provider) &&
+    !PAYMENT_PROVIDERS.some(
+      (p) => p.value === settings.payment_gateway_provider,
+    ) &&
     settings.payment_gateway_provider !== "other";
 
   // The value to show in the select dropdown
@@ -61,7 +70,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Integrations Settings</h3>
+      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+        Integrations Settings
+      </h3>
 
       {/* Accounting Integration */}
       <div className="bg-[var(--card-secondary-bg)] border border-[var(--border-color)] rounded-lg p-4">
@@ -75,10 +86,15 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
               type="checkbox"
               id="accounting_integration_enabled"
               checked={settings.accounting_integration_enabled || false}
-              onChange={(e) => onUpdate("accounting_integration_enabled", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("accounting_integration_enabled", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="accounting_integration_enabled" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="accounting_integration_enabled"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Enable Accounting Integration
             </label>
           </div>
@@ -123,10 +139,15 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
               type="checkbox"
               id="payment_gateway_enabled"
               checked={settings.payment_gateway_enabled || false}
-              onChange={(e) => onUpdate("payment_gateway_enabled", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("payment_gateway_enabled", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="payment_gateway_enabled" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="payment_gateway_enabled"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Enable Payment Gateway
             </label>
           </div>
@@ -141,7 +162,10 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
                 if (val === "other") {
                   // Keep current value (could be empty or existing custom)
                   // If currently empty, set to empty string
-                  onUpdate("payment_gateway_provider", settings.payment_gateway_provider || "");
+                  onUpdate(
+                    "payment_gateway_provider",
+                    settings.payment_gateway_provider || "",
+                  );
                 } else {
                   onUpdate("payment_gateway_provider", val);
                 }
@@ -149,9 +173,13 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
               className="windows-input w-full"
               disabled={!settings.payment_gateway_enabled}
             >
-              <option value="" disabled>Select a provider</option>
-              {PAYMENT_PROVIDERS.map(p => (
-                <option key={p.value} value={p.value}>{p.label}</option>
+              <option value="" disabled>
+                Select a provider
+              </option>
+              {PAYMENT_PROVIDERS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
               ))}
             </select>
           </div>
@@ -164,7 +192,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
               <input
                 type="text"
                 value={settings.payment_gateway_provider || ""}
-                onChange={(e) => onUpdate("payment_gateway_provider", e.target.value)}
+                onChange={(e) =>
+                  onUpdate("payment_gateway_provider", e.target.value)
+                }
                 className="windows-input w-full"
                 placeholder="e.g., MyCustomGateway"
                 disabled={!settings.payment_gateway_enabled}
@@ -178,7 +208,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
             <input
               type="password"
               value={settings.payment_gateway_api_key || ""}
-              onChange={(e) => onUpdate("payment_gateway_api_key", e.target.value)}
+              onChange={(e) =>
+                onUpdate("payment_gateway_api_key", e.target.value)
+              }
               className="windows-input w-full"
               placeholder="••••••••••••••••"
               disabled={!settings.payment_gateway_enabled}
@@ -205,10 +237,15 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
         <div className="space-y-4">
           {webhooks.length > 0 ? (
             webhooks.map((webhook, index) => (
-              <div key={index} className="border border-[var(--border-color)] rounded-lg p-4 bg-[var(--card-bg)]">
+              <div
+                key={index}
+                className="border border-[var(--border-color)] rounded-lg p-4 bg-[var(--card-bg)]"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2 flex justify-between items-start">
-                    <h5 className="text-sm font-medium text-[var(--text-primary)]">Webhook #{index + 1}</h5>
+                    <h5 className="text-sm font-medium text-[var(--text-primary)]">
+                      Webhook #{index + 1}
+                    </h5>
                     <button
                       onClick={() => removeWebhook(index)}
                       className="text-[var(--danger-color)] hover:text-[var(--danger-hover)] text-sm"
@@ -223,7 +260,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
                     <input
                       type="url"
                       value={webhook.url}
-                      onChange={(e) => handleWebhookChange(index, "url", e.target.value)}
+                      onChange={(e) =>
+                        handleWebhookChange(index, "url", e.target.value)
+                      }
                       className="windows-input w-full"
                       placeholder="https://example.com/webhook"
                     />
@@ -239,7 +278,10 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
                         handleWebhookChange(
                           index,
                           "events",
-                          e.target.value.split(",").map((s) => s.trim()).filter(Boolean)
+                          e.target.value
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
                         )
                       }
                       className="windows-input w-full"
@@ -251,10 +293,15 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
                       type="checkbox"
                       id={`webhook_enabled_${index}`}
                       checked={webhook.enabled}
-                      onChange={(e) => handleWebhookChange(index, "enabled", e.target.checked)}
+                      onChange={(e) =>
+                        handleWebhookChange(index, "enabled", e.target.checked)
+                      }
                       className="windows-checkbox"
                     />
-                    <label htmlFor={`webhook_enabled_${index}`} className="text-sm text-[var(--text-secondary)]">
+                    <label
+                      htmlFor={`webhook_enabled_${index}`}
+                      className="text-sm text-[var(--text-secondary)]"
+                    >
                       Enabled
                     </label>
                   </div>
@@ -265,7 +312,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
                     <input
                       type="text"
                       value={webhook.secret || ""}
-                      onChange={(e) => handleWebhookChange(index, "secret", e.target.value)}
+                      onChange={(e) =>
+                        handleWebhookChange(index, "secret", e.target.value)
+                      }
                       className="windows-input w-full"
                     />
                   </div>
@@ -273,7 +322,9 @@ const IntegrationsTab: React.FC<Props> = ({ settings, onUpdate }) => {
               </div>
             ))
           ) : (
-            <p className="text-sm text-[var(--text-secondary)] italic">No webhooks configured.</p>
+            <p className="text-sm text-[var(--text-secondary)] italic">
+              No webhooks configured.
+            </p>
           )}
         </div>
       </div>

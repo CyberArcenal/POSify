@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import type { Purchase } from '../../../api/purchase';
-import { allowedNextStatuses } from '../utils/statusTransitions';
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import type { Purchase } from "../../../api/utils/purchase";
+import { allowedNextStatuses } from "../utils/statusTransitions";
 
 interface StatusUpdateDialogProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
   const allowedStatuses = allowedNextStatuses(purchase.status);
   const [selectedStatus, setSelectedStatus] = useState<string>(
-    allowedStatuses.length > 0 ? allowedStatuses[0] : ''
+    allowedStatuses.length > 0 ? allowedStatuses[0] : "",
   );
 
   const handleConfirm = () => {
@@ -47,7 +47,8 @@ export const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
         <div className="p-4">
           <p className="text-sm text-[var(--text-secondary)] mb-3">
-            Current status: <span className="font-medium capitalize">{purchase.status}</span>
+            Current status:{" "}
+            <span className="font-medium capitalize">{purchase.status}</span>
           </p>
 
           {allowedStatuses.length === 0 ? (
@@ -57,7 +58,10 @@ export const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
           ) : (
             <div className="space-y-2">
               {allowedStatuses.map((status) => (
-                <label key={status} className="flex items-center gap-2 p-2 rounded hover:bg-[var(--card-hover-bg)] cursor-pointer">
+                <label
+                  key={status}
+                  className="flex items-center gap-2 p-2 rounded hover:bg-[var(--card-hover-bg)] cursor-pointer"
+                >
                   <input
                     type="radio"
                     name="status"
@@ -66,7 +70,9 @@ export const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
                     onChange={(e) => setSelectedStatus(e.target.value)}
                     className="text-[var(--accent-blue)]"
                   />
-                  <span className="text-[var(--text-primary)] capitalize">{status}</span>
+                  <span className="text-[var(--text-primary)] capitalize">
+                    {status}
+                  </span>
                 </label>
               ))}
             </div>

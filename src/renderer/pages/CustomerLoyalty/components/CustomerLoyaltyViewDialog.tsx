@@ -1,7 +1,7 @@
 import React from "react";
 import { X, Loader2, Award, TrendingDown, Calendar } from "lucide-react";
-import { type Customer } from "../../../api/customer";
-import { type LoyaltyTransaction } from "../../../api/loyalty";
+import { type Customer } from "../../../api/utils/customer";
+import { type LoyaltyTransaction } from "../../../api/utils/loyalty";
 
 interface CustomerLoyaltyViewDialogProps {
   isOpen: boolean;
@@ -11,23 +11,27 @@ interface CustomerLoyaltyViewDialogProps {
   onClose: () => void;
 }
 
-export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps> = ({
-  isOpen,
-  customer,
-  transactions,
-  loading,
-  onClose,
-}) => {
+export const CustomerLoyaltyViewDialog: React.FC<
+  CustomerLoyaltyViewDialogProps
+> = ({ isOpen, customer, transactions, loading, onClose }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black/50 transition-opacity"
+          onClick={onClose}
+        />
         <div className="relative bg-[var(--card-bg)] rounded-lg w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-xl">
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
-            <h2 className="text-xl font-bold text-[var(--text-primary)]">Customer Loyalty Details</h2>
-            <button onClick={onClose} className="p-1 hover:bg-[var(--card-hover-bg)] rounded">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
+              Customer Loyalty Details
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-[var(--card-hover-bg)] rounded"
+            >
               <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
           </div>
@@ -41,7 +45,9 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
               <div className="space-y-6">
                 {/* Customer Info */}
                 <div className="bg-[var(--card-secondary-bg)] rounded-lg p-4 border border-[var(--border-color)]">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">{customer.name}</h3>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    {customer.name}
+                  </h3>
                   <div className="flex items-center gap-4 mt-2 text-sm text-[var(--text-secondary)]">
                     <span>{customer.contactInfo || "No contact info"}</span>
                     <span className="flex items-center gap-1">
@@ -50,16 +56,24 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
                     </span>
                   </div>
                   <div className="mt-4">
-                    <p className="text-sm text-[var(--text-tertiary)]">Current Points Balance</p>
-                    <p className="text-3xl font-bold text-[var(--accent-purple)]">{customer.loyaltyPointsBalance}</p>
+                    <p className="text-sm text-[var(--text-tertiary)]">
+                      Current Points Balance
+                    </p>
+                    <p className="text-3xl font-bold text-[var(--accent-purple)]">
+                      {customer.loyaltyPointsBalance}
+                    </p>
                   </div>
                 </div>
 
                 {/* Transaction History */}
                 <div>
-                  <h4 className="text-md font-semibold text-[var(--text-primary)] mb-3">Loyalty History</h4>
+                  <h4 className="text-md font-semibold text-[var(--text-primary)] mb-3">
+                    Loyalty History
+                  </h4>
                   {transactions.length === 0 ? (
-                    <p className="text-sm text-[var(--text-tertiary)]">No loyalty transactions found.</p>
+                    <p className="text-sm text-[var(--text-tertiary)]">
+                      No loyalty transactions found.
+                    </p>
                   ) : (
                     <div className="border border-[var(--border-color)] rounded-lg overflow-hidden">
                       <table className="w-full text-sm">
@@ -75,7 +89,9 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
                         <tbody className="divide-y divide-[var(--border-color)]">
                           {transactions.map((tx) => (
                             <tr key={tx.id}>
-                              <td className="px-4 py-2">{new Date(tx.timestamp).toLocaleString()}</td>
+                              <td className="px-4 py-2">
+                                {new Date(tx.timestamp).toLocaleString()}
+                              </td>
                               <td className="px-4 py-2 text-center">
                                 {tx.pointsChange > 0 ? (
                                   <span className="inline-flex items-center gap-1 text-[var(--accent-green)]">
@@ -89,12 +105,19 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
                                   </span>
                                 )}
                               </td>
-                              <td className={`px-4 py-2 text-right font-medium ${
-                                tx.pointsChange > 0 ? "text-[var(--accent-green)]" : "text-[var(--accent-red)]"
-                              }`}>
-                                {tx.pointsChange > 0 ? "+" : ""}{tx.pointsChange}
+                              <td
+                                className={`px-4 py-2 text-right font-medium ${
+                                  tx.pointsChange > 0
+                                    ? "text-[var(--accent-green)]"
+                                    : "text-[var(--accent-red)]"
+                                }`}
+                              >
+                                {tx.pointsChange > 0 ? "+" : ""}
+                                {tx.pointsChange}
                               </td>
-                              <td className="px-4 py-2 text-[var(--text-secondary)]">{tx.notes || "—"}</td>
+                              <td className="px-4 py-2 text-[var(--text-secondary)]">
+                                {tx.notes || "—"}
+                              </td>
                               <td className="px-4 py-2 text-center">
                                 {tx.saleId ? (
                                   <a
@@ -105,7 +128,9 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
                                   >
                                     #{tx.saleId}
                                   </a>
-                                ) : "—"}
+                                ) : (
+                                  "—"
+                                )}
                               </td>
                             </tr>
                           ))}
@@ -116,7 +141,9 @@ export const CustomerLoyaltyViewDialog: React.FC<CustomerLoyaltyViewDialogProps>
                 </div>
               </div>
             ) : (
-              <p className="text-center text-[var(--text-tertiary)] py-12">No customer selected.</p>
+              <p className="text-center text-[var(--text-tertiary)] py-12">
+                No customer selected.
+              </p>
             )}
           </div>
         </div>

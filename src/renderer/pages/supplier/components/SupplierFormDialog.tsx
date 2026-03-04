@@ -1,10 +1,10 @@
 // src/renderer/pages/supplier/components/SupplierFormDialog.tsx
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { X, Loader2 } from 'lucide-react';
-import supplierAPI, { type Supplier } from '../../../api/supplier';
-import { dialogs } from '../../../utils/dialogs';
-import type { FormMode } from '../hooks/useSupplierForm';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { X, Loader2 } from "lucide-react";
+import supplierAPI, { type Supplier } from "../../../api/utils/supplier";
+import { dialogs } from "../../../utils/dialogs";
+import type { FormMode } from "../hooks/useSupplierForm";
 
 interface SupplierFormDialogProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ interface SupplierFormDialogProps {
 
 interface FormData {
   name: string;
-  email?: string | null;   // email (API uses 'emain')
+  email?: string | null; // email (API uses 'emain')
   phone?: string | null;
   address?: string | null;
   isActive: boolean;
@@ -31,14 +31,21 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
       isActive: true,
-      ...Object.fromEntries(Object.entries(initialData || {}).filter(([, v]) => v !== null)),
+      ...Object.fromEntries(
+        Object.entries(initialData || {}).filter(([, v]) => v !== null),
+      ),
     },
   });
 
@@ -46,16 +53,19 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
     if (isOpen && initialData) {
       reset(initialData);
     } else if (isOpen) {
-      reset({ name: '', email: '', phone: '', address: '', isActive: true });
+      reset({ name: "", email: "", phone: "", address: "", isActive: true });
     }
   }, [isOpen, initialData, reset]);
 
   const onSubmit = async (data: FormData) => {
     try {
-      if (mode === 'add') {
+      if (mode === "add") {
         const response = await supplierAPI.create(data);
         if (response.status) {
-          dialogs.alert({ title: 'Success', message: 'Supplier created successfully.' });
+          dialogs.alert({
+            title: "Success",
+            message: "Supplier created successfully.",
+          });
           onSuccess();
         } else {
           throw new Error(response.message);
@@ -64,14 +74,17 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
         if (!supplierId) return;
         const response = await supplierAPI.update(supplierId, data);
         if (response.status) {
-          dialogs.alert({ title: 'Success', message: 'Supplier updated successfully.' });
+          dialogs.alert({
+            title: "Success",
+            message: "Supplier updated successfully.",
+          });
           onSuccess();
         } else {
           throw new Error(response.message);
         }
       }
     } catch (error: any) {
-      dialogs.alert({ title: 'Error', message: error.message });
+      dialogs.alert({ title: "Error", message: error.message });
     }
   };
 
@@ -84,7 +97,7 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
         <div className="relative bg-[var(--card-bg)] rounded-lg w-full max-w-md p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-              {mode === 'add' ? 'Add Supplier' : 'Edit Supplier'}
+              {mode === "add" ? "Add Supplier" : "Edit Supplier"}
             </h2>
             <button
               onClick={onClose}
@@ -100,11 +113,13 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
                 Name <span className="text-[var(--accent-red)]">*</span>
               </label>
               <input
-                {...register('name', { required: 'Name is required' })}
+                {...register("name", { required: "Name is required" })}
                 className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)]"
               />
               {errors.name && (
-                <p className="mt-1 text-xs text-[var(--accent-red)]">{errors.name.message}</p>
+                <p className="mt-1 text-xs text-[var(--accent-red)]">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
@@ -114,7 +129,7 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
               </label>
               <input
                 type="email"
-                {...register('email')}
+                {...register("email")}
                 placeholder="email@example.com"
                 className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)]"
               />
@@ -125,7 +140,7 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
                 Phone
               </label>
               <input
-                {...register('phone')}
+                {...register("phone")}
                 placeholder="+63 XXX XXX XXXX"
                 className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)]"
               />
@@ -136,7 +151,7 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
                 Address
               </label>
               <textarea
-                {...register('address')}
+                {...register("address")}
                 rows={2}
                 className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] resize-none"
               />
@@ -145,11 +160,14 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                {...register('isActive')}
+                {...register("isActive")}
                 id="isActive"
                 className="rounded border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--accent-blue)] focus:ring-[var(--accent-blue)]"
               />
-              <label htmlFor="isActive" className="text-sm text-[var(--text-primary)]">
+              <label
+                htmlFor="isActive"
+                className="text-sm text-[var(--text-primary)]"
+              >
                 Active
               </label>
             </div>
@@ -168,7 +186,7 @@ export const SupplierFormDialog: React.FC<SupplierFormDialogProps> = ({
                 className="px-4 py-2 bg-[var(--accent-blue)] text-white rounded-lg text-sm hover:bg-[var(--accent-blue-hover)] disabled:opacity-50 flex items-center gap-2"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                {mode === 'add' ? 'Create' : 'Update'}
+                {mode === "add" ? "Create" : "Update"}
               </button>
             </div>
           </form>

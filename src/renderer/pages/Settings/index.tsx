@@ -11,7 +11,7 @@ import DataReportsTab from "./components/DataReportsTab";
 import IntegrationsTab from "./components/IntegrationsTab";
 import AuditSecurityTab from "./components/AuditSecurityTab";
 import SystemInfoCard from "./components/SystemInfoCard";
-import type { SettingType } from "../../api/system_config";
+import type { SettingType } from "../../api/utils/system_config";
 
 // Map category keys to display labels
 const TAB_LABELS: Record<string, string> = {
@@ -55,10 +55,12 @@ const SettingsPage: React.FC = () => {
 
   // Determine which tabs to show based on what the API returned
   const availableTabs = Object.keys(groupedConfig).filter(
-    (key) => TAB_LABELS[key] // only show if we have a label
+    (key) => TAB_LABELS[key], // only show if we have a label
   );
 
-  const [activeTab, setActiveTab] = useState<string>(availableTabs[0] || "general");
+  const [activeTab, setActiveTab] = useState<string>(
+    availableTabs[0] || "general",
+  );
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -90,7 +92,10 @@ const SettingsPage: React.FC = () => {
         {error && (
           <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-400">
             <span>{error}</span>
-            <button onClick={() => setError(null)} className="ml-auto underline">
+            <button
+              onClick={() => setError(null)}
+              className="ml-auto underline"
+            >
               Dismiss
             </button>
           </div>
@@ -98,7 +103,10 @@ const SettingsPage: React.FC = () => {
         {successMessage && (
           <div className="mb-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex items-center gap-2 text-green-400">
             <span>{successMessage}</span>
-            <button onClick={() => setSuccessMessage(null)} className="ml-auto underline">
+            <button
+              onClick={() => setSuccessMessage(null)}
+              className="ml-auto underline"
+            >
               Dismiss
             </button>
           </div>
@@ -113,16 +121,25 @@ const SettingsPage: React.FC = () => {
 
         <div className="bg-[var(--card-bg)] border border-[var(--border-color)]/20 rounded-lg p-6">
           {activeTab === "general" && (
-            <GeneralTab settings={groupedConfig.general} onUpdate={updateGeneral} />
+            <GeneralTab
+              settings={groupedConfig.general}
+              onUpdate={updateGeneral}
+            />
           )}
           {activeTab === "inventory" && (
-            <InventoryTab settings={groupedConfig.inventory} onUpdate={updateInventory} />
+            <InventoryTab
+              settings={groupedConfig.inventory}
+              onUpdate={updateInventory}
+            />
           )}
           {activeTab === "sales" && (
             <SalesTab settings={groupedConfig.sales} onUpdate={updateSales} />
           )}
           {activeTab === "cashier" && (
-            <CashierTab settings={groupedConfig.cashier} onUpdate={updateCashier} />
+            <CashierTab
+              settings={groupedConfig.cashier}
+              onUpdate={updateCashier}
+            />
           )}
           {activeTab === "notifications" && (
             <NotificationsTab
@@ -133,13 +150,22 @@ const SettingsPage: React.FC = () => {
             />
           )}
           {activeTab === "data_reports" && (
-            <DataReportsTab settings={groupedConfig.data_reports} onUpdate={updateDataReports} />
+            <DataReportsTab
+              settings={groupedConfig.data_reports}
+              onUpdate={updateDataReports}
+            />
           )}
           {activeTab === "integrations" && (
-            <IntegrationsTab settings={groupedConfig.integrations} onUpdate={updateIntegrations} />
+            <IntegrationsTab
+              settings={groupedConfig.integrations}
+              onUpdate={updateIntegrations}
+            />
           )}
           {activeTab === "audit_security" && (
-            <AuditSecurityTab settings={groupedConfig.audit_security} onUpdate={updateAuditSecurity} />
+            <AuditSecurityTab
+              settings={groupedConfig.audit_security}
+              onUpdate={updateAuditSecurity}
+            />
           )}
         </div>
       </main>

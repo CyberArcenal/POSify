@@ -16,7 +16,7 @@ import CategorySelect from "../../components/Selects/Category"; // adjust path a
 import CashierHeader from "./components/CashierHeader";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useBarcodeEnabled } from "../../utils/posUtils";
-import productAPI from "../../api/product";
+import productAPI from "../../api/utils/product";
 
 const Cashier: React.FC = () => {
   const {
@@ -74,7 +74,6 @@ const Cashier: React.FC = () => {
     total: Decimal;
     cartItems: CartItem[];
   } | null>(null);
-
 
   const [scannedBarcode, setScannedBarcode] = useState<string>("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -192,7 +191,6 @@ const Cashier: React.FC = () => {
           }
         }
       }
-      
 
       // Ctrl+Enter = Checkout
       if (e.ctrlKey && e.key === "Enter") {

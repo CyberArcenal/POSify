@@ -1,12 +1,19 @@
 import { useState } from "react";
-import productAPI, { type Product, type ProductSalesReportItem } from "../../../api/product";
-import inventoryAPI, { type InventoryMovement } from "../../../api/inventory";
+import productAPI, {
+  type Product,
+  type ProductSalesReportItem,
+} from "../../../api/utils/product";
+import inventoryAPI, {
+  type InventoryMovement,
+} from "../../../api/utils/inventory";
 
 export function useProductView() {
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [movements, setMovements] = useState<InventoryMovement[]>([]);
-  const [salesStats, setSalesStats] = useState<ProductSalesReportItem | null>(null);
+  const [salesStats, setSalesStats] = useState<ProductSalesReportItem | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
 
   const open = async (product: Product) => {

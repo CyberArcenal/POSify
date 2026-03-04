@@ -1,9 +1,9 @@
 // src/renderer/pages/category/components/CategoryViewDialog.tsx
-import React from 'react';
-import { X, Package, Loader2 } from 'lucide-react';
-import type { Category } from '../../../api/category';
-import type { Product } from '../../../api/product';
-import Decimal from 'decimal.js';
+import React from "react";
+import { X, Package, Loader2 } from "lucide-react";
+import type { Category } from "../../../api/utils/category";
+import type { Product } from "../../../api/utils/product";
+import Decimal from "decimal.js";
 
 interface CategoryViewDialogProps {
   category: Category | null;
@@ -43,17 +43,23 @@ export const CategoryViewDialog: React.FC<CategoryViewDialogProps> = ({
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
               <p className="text-sm text-[var(--text-tertiary)]">Name</p>
-              <p className="text-lg font-semibold text-[var(--text-primary)]">{category.name}</p>
+              <p className="text-lg font-semibold text-[var(--text-primary)]">
+                {category.name}
+              </p>
             </div>
             <div className="bg-[var(--card-secondary-bg)] p-4 rounded-lg">
               <p className="text-sm text-[var(--text-tertiary)]">Status</p>
-              <p className={`text-lg font-semibold ${category.isActive ? 'text-[var(--status-completed)]' : 'text-[var(--status-cancelled)]'}`}>
-                {category.isActive ? 'Active' : 'Inactive'}
+              <p
+                className={`text-lg font-semibold ${category.isActive ? "text-[var(--status-completed)]" : "text-[var(--status-cancelled)]"}`}
+              >
+                {category.isActive ? "Active" : "Inactive"}
               </p>
             </div>
             <div className="col-span-2 bg-[var(--card-secondary-bg)] p-4 rounded-lg">
               <p className="text-sm text-[var(--text-tertiary)]">Description</p>
-              <p className="text-[var(--text-primary)]">{category.description || '—'}</p>
+              <p className="text-[var(--text-primary)]">
+                {category.description || "—"}
+              </p>
             </div>
           </div>
 
@@ -69,24 +75,42 @@ export const CategoryViewDialog: React.FC<CategoryViewDialogProps> = ({
                 <Loader2 className="w-6 h-6 animate-spin text-[var(--accent-blue)]" />
               </div>
             ) : products.length === 0 ? (
-              <p className="text-center text-[var(--text-tertiary)] py-8">No products in this category.</p>
+              <p className="text-center text-[var(--text-tertiary)] py-8">
+                No products in this category.
+              </p>
             ) : (
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[var(--border-color)]">
-                    <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">SKU</th>
-                    <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">Name</th>
-                    <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">Price</th>
-                    <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">Stock</th>
+                    <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                      SKU
+                    </th>
+                    <th className="text-left py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                      Name
+                    </th>
+                    <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                      Price
+                    </th>
+                    <th className="text-right py-2 text-xs font-medium text-[var(--text-tertiary)]">
+                      Stock
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border-color)]">
                   {products.map((product) => (
                     <tr key={product.id}>
-                      <td className="py-2 text-sm font-mono text-[var(--text-primary)]">{product.sku}</td>
-                      <td className="py-2 text-sm text-[var(--text-secondary)]">{product.name}</td>
-                      <td className="py-2 text-right text-sm text-[var(--accent-green)]">₱{new Decimal(product.price).toFixed(2)}</td>
-                      <td className="py-2 text-right text-sm text-[var(--text-primary)]">{product.stockQty}</td>
+                      <td className="py-2 text-sm font-mono text-[var(--text-primary)]">
+                        {product.sku}
+                      </td>
+                      <td className="py-2 text-sm text-[var(--text-secondary)]">
+                        {product.name}
+                      </td>
+                      <td className="py-2 text-right text-sm text-[var(--accent-green)]">
+                        ₱{new Decimal(product.price).toFixed(2)}
+                      </td>
+                      <td className="py-2 text-right text-sm text-[var(--text-primary)]">
+                        {product.stockQty}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

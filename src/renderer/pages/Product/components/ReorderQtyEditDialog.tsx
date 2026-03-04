@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { X, Loader2 } from "lucide-react";
-import productAPI from "../../../api/product";
+import productAPI from "../../../api/utils/product";
 import { dialogs } from "../../../utils/dialogs";
-import type { Product } from "../../../api/product";
+import type { Product } from "../../../api/utils/product";
 
 interface ReorderQtyEditDialogProps {
   product: Product | null;
@@ -37,7 +37,7 @@ export const ReorderQtyEditDialog: React.FC<ReorderQtyEditDialogProps> = ({
       const response = await productAPI.update(
         product.id,
         { reorderQty: newQty },
-        "system"
+        "system",
       );
       if (response.status) {
         dialogs.alert({
@@ -59,26 +59,38 @@ export const ReorderQtyEditDialog: React.FC<ReorderQtyEditDialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+          onClick={onClose}
+        />
         <div className="relative bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-xl w-full max-w-md p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Edit Reorder Quantity</h2>
-            <button onClick={onClose} className="p-1 hover:bg-[var(--card-hover-bg)] rounded">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+              Edit Reorder Quantity
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-[var(--card-hover-bg)] rounded"
+            >
               <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
           </div>
 
           <div className="mb-4 p-3 bg-[var(--card-secondary-bg)] rounded-lg">
-            <p className="text-sm text-[var(--text-primary)] font-medium">{product.name}</p>
+            <p className="text-sm text-[var(--text-primary)] font-medium">
+              {product.name}
+            </p>
             <p className="text-xs text-[var(--text-tertiary)]">
-              SKU: {product.sku} | Current Reorder Quantity: {product.reorderQty}
+              SKU: {product.sku} | Current Reorder Quantity:{" "}
+              {product.reorderQty}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
-                New Reorder Quantity <span className="text-[var(--accent-red)]">*</span>
+                New Reorder Quantity{" "}
+                <span className="text-[var(--accent-red)]">*</span>
               </label>
               <input
                 type="number"
@@ -98,7 +110,11 @@ export const ReorderQtyEditDialog: React.FC<ReorderQtyEditDialogProps> = ({
             )}
 
             <div className="flex justify-end gap-2 pt-4">
-              <button type="button" onClick={onClose} className="px-4 py-2 border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] hover:bg-[var(--card-hover-bg)]">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] hover:bg-[var(--card-hover-bg)]"
+              >
                 Cancel
               </button>
               <button

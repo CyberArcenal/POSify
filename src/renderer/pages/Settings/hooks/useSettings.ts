@@ -10,7 +10,7 @@ import systemConfigAPI, {
   type DataReportsSettings,
   type IntegrationsSettings,
   type AuditSecuritySettings,
-} from "../../../api/system_config";
+} from "../../../api/utils/system_config";
 import { dialogs } from "../../../utils/dialogs";
 import { useSettings as useSettings1 } from "../../../contexts/SettingsContext";
 // ========== Default values for every category ==========

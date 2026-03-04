@@ -10,8 +10,8 @@ import type {
   GroupedSettingsData,
   SettingType,
   UpdateCategorySettingsData,
-} from "../api/system_config";
-import systemConfigAPI from "../api/system_config";
+} from "../api/utils/system_config";
+import systemConfigAPI from "../api/utils/system_config";
 
 // State shape
 interface SettingsState {

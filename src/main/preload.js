@@ -82,6 +82,12 @@ contextBridge.exposeInMainWorld("backendAPI", {
     ipcRenderer.invoke("cashDrawer:open", reason),
   printerTestPrint: () => ipcRenderer.invoke("printer:test-print"),
 
+    updater: (payload) => ipcRenderer.invoke("updater", payload),
+  on: (event, callback) => {
+    ipcRenderer.on(event, callback);
+    return () => ipcRenderer.removeListener(event, callback);
+  },
+
   // 🛠️ Logging
   log: {
     info: (message, data) => console.log("[Renderer]", message, data),

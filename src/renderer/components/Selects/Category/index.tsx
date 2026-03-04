@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Search, ChevronDown, Tag, X } from "lucide-react";
-import type { Category } from "../../../api/category";
-import categoryAPI from "../../../api/category";
+import type { Category } from "../../../api/utils/category";
+import categoryAPI from "../../../api/utils/category";
 
 interface CategorySelectProps {
   value: number | null;
@@ -27,7 +27,11 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [dropdownStyle, setDropdownStyle] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownStyle, setDropdownStyle] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +47,9 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
 
         const response = await categoryAPI.getAll(params);
         if (response.status && response.data) {
-          const list = Array.isArray(response.data) ? response.data : response.data.items || [];
+          const list = Array.isArray(response.data)
+            ? response.data
+            : response.data.items || [];
           setCategories(list);
           setFilteredCategories(list);
         }
@@ -63,7 +69,9 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
       return;
     }
     const lower = searchTerm.toLowerCase();
-    setFilteredCategories(categories.filter((cat) => cat.name.toLowerCase().includes(lower)));
+    setFilteredCategories(
+      categories.filter((cat) => cat.name.toLowerCase().includes(lower)),
+    );
   }, [searchTerm, categories]);
 
   // Focus search when dropdown opens
@@ -146,19 +154,30 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
           minHeight: "42px",
         }}
       >
-        <Tag className="w-4 h-4 flex-shrink-0" style={{ color: "var(--primary-color)" }} />
+        <Tag
+          className="w-4 h-4 flex-shrink-0"
+          style={{ color: "var(--primary-color)" }}
+        />
         <div className="flex-1 min-w-0 flex items-center gap-2">
           {selectedCategory ? (
             <>
-              <span className="font-medium truncate">{selectedCategory.name}</span>
+              <span className="font-medium truncate">
+                {selectedCategory.name}
+              </span>
               {selectedCategory.description && (
-                <span className="text-xs truncate" style={{ color: "var(--text-secondary)" }}>
+                <span
+                  className="text-xs truncate"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   ({selectedCategory.description})
                 </span>
               )}
             </>
           ) : (
-            <span className="truncate" style={{ color: "var(--text-secondary)" }}>
+            <span
+              className="truncate"
+              style={{ color: "var(--text-secondary)" }}
+            >
               {placeholder}
             </span>
           )}
@@ -198,7 +217,10 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
             }}
           >
             {/* Search bar */}
-            <div className="p-2 border-b" style={{ borderColor: "var(--border-color)" }}>
+            <div
+              className="p-2 border-b"
+              style={{ borderColor: "var(--border-color)" }}
+            >
               <div className="relative">
                 <Search
                   className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4"
@@ -223,11 +245,17 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
             {/* Category list */}
             <div className="overflow-y-auto" style={{ maxHeight: "250px" }}>
               {loading && categories.length === 0 ? (
-                <div className="p-3 text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="p-3 text-center text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   Loading...
                 </div>
               ) : filteredCategories.length === 0 ? (
-                <div className="p-3 text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="p-3 text-center text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   No categories found
                 </div>
               ) : (
@@ -243,10 +271,16 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
                     `}
                     style={{ borderBottom: "1px solid var(--border-color)" }}
                   >
-                    <Tag className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--primary-color)" }} />
+                    <Tag
+                      className="w-3.5 h-3.5 flex-shrink-0"
+                      style={{ color: "var(--primary-color)" }}
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium truncate" style={{ color: "var(--text-secondary)" }}>
+                        <span
+                          className="font-medium truncate"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
                           {category.name}
                         </span>
                         <span
@@ -255,14 +289,19 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
                             backgroundColor: category.isActive
                               ? "var(--status-completed-bg)"
                               : "var(--status-cancelled-bg)",
-                            color: category.isActive ? "var(--status-completed)" : "var(--status-cancelled)",
+                            color: category.isActive
+                              ? "var(--status-completed)"
+                              : "var(--status-cancelled)",
                           }}
                         >
                           {category.isActive ? "Active" : "Inactive"}
                         </span>
                       </div>
                       {category.description && (
-                        <div className="text-xs truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>
+                        <div
+                          className="text-xs truncate mt-0.5"
+                          style={{ color: "var(--text-secondary)" }}
+                        >
                           {category.description}
                         </div>
                       )}
@@ -272,7 +311,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
               )}
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

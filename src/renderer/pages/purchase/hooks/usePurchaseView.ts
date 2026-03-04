@@ -1,8 +1,11 @@
 // src/renderer/pages/purchase/hooks/usePurchaseView.ts
-import { useState } from 'react';
-import purchaseAPI, { type Purchase, type PurchaseItem } from '../../../api/purchase';
-import supplierAPI, { type Supplier } from '../../../api/supplier';
-import productAPI, { type Product } from '../../../api/product';
+import { useState } from "react";
+import purchaseAPI, {
+  type Purchase,
+  type PurchaseItem,
+} from "../../../api/utils/purchase";
+import supplierAPI, { type Supplier } from "../../../api/utils/supplier";
+import productAPI, { type Product } from "../../../api/utils/product";
 
 export function usePurchaseView() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +31,7 @@ export function usePurchaseView() {
         }
       }
     } catch (error) {
-      console.error('Error loading purchase details:', error);
+      console.error("Error loading purchase details:", error);
     } finally {
       setLoading(false);
     }

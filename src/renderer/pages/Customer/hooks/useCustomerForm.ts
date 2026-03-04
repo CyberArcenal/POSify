@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Customer } from "../../../api/customer";
+import type { Customer } from "../../../api/utils/customer";
 
 type FormMode = "add" | "edit";
 
@@ -7,7 +7,9 @@ export const useCustomerForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<FormMode>("add");
   const [customerId, setCustomerId] = useState<number | undefined>();
-  const [initialData, setInitialData] = useState<Partial<Customer> | undefined>();
+  const [initialData, setInitialData] = useState<
+    Partial<Customer> | undefined
+  >();
 
   const openAdd = () => {
     setMode("add");

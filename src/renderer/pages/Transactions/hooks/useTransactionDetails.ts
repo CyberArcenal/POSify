@@ -1,8 +1,10 @@
 import { useState } from "react";
-import type { Sale } from "../../../api/sale";
+import type { Sale } from "../../../api/utils/sale";
 
 export function useTransactionDetails() {
-  const [selectedTransaction, setSelectedTransaction] = useState<Sale | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = useState<Sale | null>(
+    null,
+  );
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   const openDetails = (transaction: Sale) => {

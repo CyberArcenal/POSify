@@ -1,6 +1,6 @@
 // src/renderer/pages/Settings/components/GeneralTab.tsx
 import React from "react";
-import type { GeneralSettings } from "../../../api/system_config";
+import type { GeneralSettings } from "../../../api/utils/system_config";
 
 interface Props {
   settings: GeneralSettings;
@@ -10,7 +10,9 @@ interface Props {
 const GeneralTab: React.FC<Props> = ({ settings, onUpdate }) => {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">General Settings</h3>
+      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+        General Settings
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
@@ -80,7 +82,9 @@ const GeneralTab: React.FC<Props> = ({ settings, onUpdate }) => {
           <input
             type="number"
             value={settings.auto_logout_minutes || 30}
-            onChange={(e) => onUpdate("auto_logout_minutes", parseInt(e.target.value))}
+            onChange={(e) =>
+              onUpdate("auto_logout_minutes", parseInt(e.target.value))
+            }
             className="windows-input w-full"
           />
         </div>

@@ -78,6 +78,8 @@ jobs:
             artifacts/**/*.dmg
             artifacts/**/*.AppImage
             artifacts/**/*.deb
+            artifacts/**/latest*.yml
+            artifacts/**/latest*.yaml
           prerelease: true
           generate_release_notes: true
         env:

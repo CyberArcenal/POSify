@@ -1,7 +1,7 @@
 // src/renderer/pages/reorder/hooks/useReorder.ts
-import { useState, useEffect, useCallback } from 'react';
-import productAPI, { type Product } from '../../../api/product';
-import supplierAPI, { type Supplier } from '../../../api/supplier';
+import { useState, useEffect, useCallback } from "react";
+import productAPI, { type Product } from "../../../api/utils/product";
+import supplierAPI, { type Supplier } from "../../../api/utils/supplier";
 
 export interface LowStockProduct extends Product {
   supplier: Supplier | null; // supplier relation should be populated
@@ -30,7 +30,7 @@ export function useReorder(threshold?: number) {
 
       // Group by supplier
       const groupsMap = new Map<number, SupplierGroup>();
-      lowStockProducts.forEach(product => {
+      lowStockProducts.forEach((product) => {
         if (product.supplier) {
           const supplierId = product.supplier.id;
           if (!groupsMap.has(supplierId)) {
@@ -46,7 +46,11 @@ export function useReorder(threshold?: number) {
           const unassignedId = 0;
           if (!groupsMap.has(unassignedId)) {
             groupsMap.set(unassignedId, {
-              supplier: { id: 0, name: 'Unassigned', isActive: true } as Supplier,
+              supplier: {
+                id: 0,
+                name: "Unassigned",
+                isActive: true,
+              } as Supplier,
               products: [],
               lowStockCount: 0,
             });
@@ -56,14 +60,14 @@ export function useReorder(threshold?: number) {
       });
 
       // Compute counts
-      groupsMap.forEach(group => {
+      groupsMap.forEach((group) => {
         group.lowStockCount = group.products.length;
       });
 
       setProducts(lowStockProducts);
       setSupplierGroups(Array.from(groupsMap.values()));
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch low stock products');
+      setError(err.message || "Failed to fetch low stock products");
     } finally {
       setLoading(false);
     }

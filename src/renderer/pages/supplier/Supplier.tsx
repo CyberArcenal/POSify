@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Plus, Loader2, AlertCircle } from "lucide-react";
 import { dialogs } from "../../utils/dialogs";
-import supplierAPI, { type Supplier } from "../../api/supplier";
+import supplierAPI, { type Supplier } from "../../api/utils/supplier";
 
 // Hooks
 import { useSuppliers, type SupplierFilters } from "./hooks/useSuppliers";

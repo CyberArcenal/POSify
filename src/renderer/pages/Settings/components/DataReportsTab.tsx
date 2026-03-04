@@ -1,5 +1,5 @@
 import React from "react";
-import type { DataReportsSettings } from "../../../api/system_config";
+import type { DataReportsSettings } from "../../../api/utils/system_config";
 
 interface Props {
   settings: DataReportsSettings;
@@ -8,7 +8,10 @@ interface Props {
 
 const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
   const handleExportFormatsChange = (value: string) => {
-    const formats = value.split(",").map((f) => f.trim()).filter(Boolean);
+    const formats = value
+      .split(",")
+      .map((f) => f.trim())
+      .filter(Boolean);
     onUpdate("export_formats", formats);
   };
 
@@ -31,7 +34,9 @@ const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
         }
         // If parsed result is an object (e.g., {0: "CSV", 1: "Excel"}), extract its values
         if (parsed && typeof parsed === "object") {
-          const values = Object.values(parsed).filter(v => typeof v === "string");
+          const values = Object.values(parsed).filter(
+            (v) => typeof v === "string",
+          );
           if (values.length > 0) {
             return values.join(", ");
           }
@@ -44,7 +49,9 @@ const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
 
     // If it's an object but not a string (e.g., directly stored as object)
     if (formats && typeof formats === "object") {
-      const values = Object.values(formats).filter(v => typeof v === "string");
+      const values = Object.values(formats).filter(
+        (v) => typeof v === "string",
+      );
       if (values.length > 0) {
         return values.join(", ");
       }
@@ -56,7 +63,9 @@ const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Data & Reports Settings</h3>
+      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+        Data & Reports Settings
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
@@ -94,7 +103,10 @@ const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
             onChange={(e) => onUpdate("auto_backup_enabled", e.target.checked)}
             className="windows-checkbox"
           />
-          <label htmlFor="auto_backup_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="auto_backup_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Automatic Backups
           </label>
         </div>
@@ -132,7 +144,9 @@ const DataReportsTab: React.FC<Props> = ({ settings, onUpdate }) => {
           <input
             type="number"
             value={settings.data_retention_days ?? 365}
-            onChange={(e) => onUpdate("data_retention_days", parseInt(e.target.value) || 0)}
+            onChange={(e) =>
+              onUpdate("data_retention_days", parseInt(e.target.value) || 0)
+            }
             className="windows-input w-full"
             min="0"
           />

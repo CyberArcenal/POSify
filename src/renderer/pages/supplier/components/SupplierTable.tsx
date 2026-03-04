@@ -1,7 +1,7 @@
 // src/renderer/pages/supplier/components/SupplierTable.tsx
-import React from 'react';
-import { Eye, Edit, Trash2, Package, Check, X } from 'lucide-react';
-import type { Supplier } from '../../../api/supplier';
+import React from "react";
+import { Eye, Edit, Trash2, Package, Check, X } from "lucide-react";
+import type { Supplier } from "../../../api/utils/supplier";
 
 // ----------------------------------------------------------------------
 // Helper Components
@@ -44,7 +44,9 @@ export const SupplierTable: React.FC<SupplierTableProps> = ({
     return (
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-8 text-center">
         <Package className="w-12 h-12 mx-auto mb-3 text-[var(--text-tertiary)]" />
-        <p className="text-[var(--text-primary)] font-medium">No suppliers found</p>
+        <p className="text-[var(--text-primary)] font-medium">
+          No suppliers found
+        </p>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Try adjusting your filters or add a new supplier
         </p>
@@ -97,7 +99,7 @@ export const SupplierTable: React.FC<SupplierTableProps> = ({
                   {supplier.phone || supplier.email || "-"}
                 </td>
                 <td className="w-1/6 px-4 py-3 text-sm text-[var(--text-secondary)] truncate">
-                  {supplier.address || '—'}
+                  {supplier.address || "—"}
                 </td>
                 <td className="w-1/6 px-4 py-3 text-right text-sm font-mono text-[var(--text-primary)]">
                   {productCounts.get(supplier.id) ?? 0}
@@ -108,21 +110,30 @@ export const SupplierTable: React.FC<SupplierTableProps> = ({
                 <td className="w-1/6 px-4 py-3">
                   <div className="flex items-center justify-center gap-2">
                     <button
-                      onClick={(e) => { e.stopPropagation(); onView(supplier); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onView(supplier);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-blue)]"
                       title="View Details"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onEdit(supplier); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(supplier);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-purple)]"
                       title="Edit"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onDelete(supplier); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(supplier);
+                      }}
                       className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-red)]"
                       title="Delete (Deactivate)"
                     >

@@ -8,7 +8,7 @@ import {
 } from "../hooks/usePurchaseForm";
 import SupplierSelect from "../../../components/Selects/Supplier";
 import ProductSelect from "../../../components/Selects/Product";
-import purchaseAPI from "../../../api/purchase";
+import purchaseAPI from "../../../api/utils/purchase";
 import { dialogs } from "../../../utils/dialogs";
 import { format } from "date-fns";
 
@@ -50,11 +50,10 @@ export const PurchaseFormDialog: React.FC<PurchaseFormDialogProps> = ({
         // Edit mode: map from API structure (purchaseItems)
         reset({
           supplierId: initialData.supplier?.id || initialData.supplierId,
-    
-orderDate: initialData.orderDate
-  ? format(new Date(initialData.orderDate), "yyyy-MM-dd")
-  : undefined
-,
+
+          orderDate: initialData.orderDate
+            ? format(new Date(initialData.orderDate), "yyyy-MM-dd")
+            : undefined,
           notes: initialData.notes || "",
           items: initialData.purchaseItems?.map((item: any) => ({
             productId: item.product.id,

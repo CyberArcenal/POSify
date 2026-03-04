@@ -10,7 +10,7 @@ import {
   PackagePlus,
 } from "lucide-react";
 import Decimal from "decimal.js";
-import { type Product } from "../../../api/product";
+import { type Product } from "../../../api/utils/product";
 import ProductActionsDropdown from "./ProductActionsDropdown"; // new import
 
 // Helper components (StatusBadge, StockBadge) remain unchanged

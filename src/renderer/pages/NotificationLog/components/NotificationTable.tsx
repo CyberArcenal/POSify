@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Eye,
   RefreshCw,
@@ -10,9 +10,9 @@ import {
   RotateCw,
   Mail,
   Loader2,
-} from 'lucide-react';
-import { formatDate } from '../../../utils/formatters';
-import type { NotificationLogEntry } from '../../../api/notification_log';
+} from "lucide-react";
+import { formatDate } from "../../../utils/formatters";
+import type { NotificationLogEntry } from "../../../api/utils/notification_log";
 
 interface NotificationTableProps {
   logs: NotificationLogEntry[];
@@ -34,15 +34,16 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
   sendingIds = new Set(),
 }) => {
   const getStatusBadge = (status: string) => {
-    const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1';
+    const baseClasses =
+      "px-2 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1";
     switch (status) {
-      case 'sent':
+      case "sent":
         return `${baseClasses} bg-green-500/20 text-green-400 border border-green-500/30`;
-      case 'queued':
+      case "queued":
         return `${baseClasses} bg-yellow-500/20 text-yellow-400 border border-yellow-500/30`;
-      case 'failed':
+      case "failed":
         return `${baseClasses} bg-red-500/20 text-red-400 border border-red-500/30`;
-      case 'resend':
+      case "resend":
         return `${baseClasses} bg-blue-500/20 text-blue-400 border border-blue-500/30`;
       default:
         return `${baseClasses} bg-gray-500/20 text-gray-400 border border-gray-500/30`;
@@ -61,8 +62,12 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
     return (
       <div className="text-center py-16 bg-[var(--card-bg)] rounded-xl border border-[var(--border-color)]/20">
         <Mail className="w-16 h-16 mx-auto text-[var(--text-tertiary)] mb-4" />
-        <h3 className="text-xl font-medium mb-2 text-[var(--text-primary)]">No notifications found</h3>
-        <p className="text-[var(--text-secondary)]">Try adjusting your filters or check back later.</p>
+        <h3 className="text-xl font-medium mb-2 text-[var(--text-primary)]">
+          No notifications found
+        </h3>
+        <p className="text-[var(--text-secondary)]">
+          Try adjusting your filters or check back later.
+        </p>
       </div>
     );
   }
@@ -72,14 +77,30 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
       <table className="w-full text-sm">
         <thead className="bg-[var(--card-secondary-bg)] border-b border-[var(--border-color)]/20">
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">ID</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Recipient</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Subject</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Status</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Retries</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Sent At</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Created</th>
-            <th className="px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Actions</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              ID
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Recipient
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Subject
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Status
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Retries
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Sent At
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Created
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-[var(--border-color)]/10">
@@ -89,20 +110,28 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
               <tr
                 key={log.id}
                 className={`hover:bg-[var(--card-hover-bg)]/20 transition-colors ${
-                  isSending ? 'sending-row' : ''
+                  isSending ? "sending-row" : ""
                 }`}
               >
-                <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">#{log.id}</td>
-                <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{log.recipient_email}</td>
+                <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">
+                  #{log.id}
+                </td>
+                <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">
+                  {log.recipient_email}
+                </td>
                 <td className="px-4 py-3 text-[var(--text-secondary)] max-w-[200px] truncate">
-                  {log.subject || '—'}
+                  {log.subject || "—"}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
                   <span className={getStatusBadge(log.status)}>
-                    {log.status === 'resend' && <RotateCw className="w-3 h-3" />}
-                    {log.status === 'sent' && <CheckCircle className="w-3 h-3" />}
-                    {log.status === 'queued' && <Clock className="w-3 h-3" />}
-                    {log.status === 'failed' && <XCircle className="w-3 h-3" />}
+                    {log.status === "resend" && (
+                      <RotateCw className="w-3 h-3" />
+                    )}
+                    {log.status === "sent" && (
+                      <CheckCircle className="w-3 h-3" />
+                    )}
+                    {log.status === "queued" && <Clock className="w-3 h-3" />}
+                    {log.status === "failed" && <XCircle className="w-3 h-3" />}
                     {log.status}
                   </span>
                 </td>
@@ -110,7 +139,7 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
                   {log.retry_count} / {log.resend_count}
                 </td>
                 <td className="px-4 py-3 text-[var(--text-secondary)] whitespace-nowrap">
-                  {log.sent_at ? formatDate(log.sent_at) : '—'}
+                  {log.sent_at ? formatDate(log.sent_at) : "—"}
                 </td>
                 <td className="px-4 py-3 text-[var(--text-secondary)] whitespace-nowrap">
                   {formatDate(log.created_at)}
@@ -125,7 +154,7 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
                     >
                       <Eye className="w-4 h-4" />
                     </button>
-                    {log.status === 'failed' && (
+                    {log.status === "failed" && (
                       <button
                         onClick={() => onRetry(log.id)}
                         disabled={isSending}
@@ -139,7 +168,7 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
                         )}
                       </button>
                     )}
-                    {(log.status === 'sent' || log.status === 'resend') && (
+                    {(log.status === "sent" || log.status === "resend") && (
                       <button
                         onClick={() => onResend(log.id)}
                         disabled={isSending}

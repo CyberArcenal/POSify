@@ -1,7 +1,7 @@
 // src/renderer/pages/category/hooks/useCategoryView.ts
-import { useState } from 'react';
-import type { Category } from '../../../api/category';
-import productAPI, { type Product } from '../../../api/product';
+import { useState } from "react";
+import type { Category } from "../../../api/utils/category";
+import productAPI, { type Product } from "../../../api/utils/product";
 
 export function useCategoryView() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,12 +16,14 @@ export function useCategoryView() {
 
     try {
       // Fetch products by category (active products)
-      const response = await productAPI.getByCategory(category.id, { isActive: true });
+      const response = await productAPI.getByCategory(category.id, {
+        isActive: true,
+      });
       if (response.status) {
         setProducts(response.data);
       }
     } catch (error) {
-      console.error('Error loading category products:', error);
+      console.error("Error loading category products:", error);
     } finally {
       setLoading(false);
     }

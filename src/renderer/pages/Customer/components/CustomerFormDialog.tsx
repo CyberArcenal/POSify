@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
-import customerAPI from "../../../api/customer";
+import customerAPI from "../../../api/utils/customer";
 import { dialogs } from "../../../utils/dialogs";
 
 interface CustomerFormDialogProps {
@@ -80,7 +80,7 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             phone: formData.phone || undefined,
             loyaltyPointsBalance: formData.loyaltyPointsBalance,
           },
-          "system"
+          "system",
         );
         dialogs.alert({
           title: "Success",
@@ -96,7 +96,7 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
             phone: formData.phone || undefined,
             loyaltyPointsBalance: formData.loyaltyPointsBalance,
           },
-          "system"
+          "system",
         );
         dialogs.alert({
           title: "Success",
@@ -116,13 +116,19 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black/50 transition-opacity"
+          onClick={onClose}
+        />
         <div className="relative bg-[var(--card-bg)] rounded-lg w-full max-w-md p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
               {mode === "add" ? "Add Customer" : "Edit Customer"}
             </h2>
-            <button onClick={onClose} className="p-1 hover:bg-[var(--card-hover-bg)] rounded">
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-[var(--card-hover-bg)] rounded"
+            >
               <X className="w-5 h-5 text-[var(--text-tertiary)]" />
             </button>
           </div>
@@ -136,13 +142,19 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className={`w-full bg-[var(--input-bg)] border ${
-                  errors.name ? "border-[var(--accent-red)]" : "border-[var(--input-border)]"
+                  errors.name
+                    ? "border-[var(--accent-red)]"
+                    : "border-[var(--input-border)]"
                 } rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]`}
               />
               {errors.name && (
-                <p className="mt-1 text-xs text-[var(--accent-red)]">{errors.name}</p>
+                <p className="mt-1 text-xs text-[var(--accent-red)]">
+                  {errors.name}
+                </p>
               )}
             </div>
 
@@ -154,14 +166,20 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className={`w-full bg-[var(--input-bg)] border ${
-                  errors.email ? "border-[var(--accent-red)]" : "border-[var(--input-border)]"
+                  errors.email
+                    ? "border-[var(--accent-red)]"
+                    : "border-[var(--input-border)]"
                 } rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]`}
                 placeholder="customer@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-xs text-[var(--accent-red)]">{errors.email}</p>
+                <p className="mt-1 text-xs text-[var(--accent-red)]">
+                  {errors.email}
+                </p>
               )}
             </div>
 
@@ -173,14 +191,20 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
                 className={`w-full bg-[var(--input-bg)] border ${
-                  errors.phone ? "border-[var(--accent-red)]" : "border-[var(--input-border)]"
+                  errors.phone
+                    ? "border-[var(--accent-red)]"
+                    : "border-[var(--input-border)]"
                 } rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]`}
                 placeholder="+1234567890"
               />
               {errors.phone && (
-                <p className="mt-1 text-xs text-[var(--accent-red)]">{errors.phone}</p>
+                <p className="mt-1 text-xs text-[var(--accent-red)]">
+                  {errors.phone}
+                </p>
               )}
             </div>
 
@@ -194,7 +218,10 @@ export const CustomerFormDialog: React.FC<CustomerFormDialogProps> = ({
                 min="0"
                 value={formData.loyaltyPointsBalance}
                 onChange={(e) =>
-                  setFormData({ ...formData, loyaltyPointsBalance: Number(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    loyaltyPointsBalance: Number(e.target.value),
+                  })
                 }
                 className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]"
               />

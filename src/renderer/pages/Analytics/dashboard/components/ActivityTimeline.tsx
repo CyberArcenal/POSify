@@ -1,7 +1,7 @@
 // src/renderer/components/dashboard/ActivityTimeline.tsx
 import React from "react";
 import { ShoppingCart, Package, Clock } from "lucide-react";
-import type { ActivityEntry } from "../../../../api/dashboard";
+import type { ActivityEntry } from "../../../../api/analytics/dashboard";
 
 interface Props {
   activities: ActivityEntry[];

@@ -7,7 +7,7 @@ import dashboardAPI, {
   type ActivityEntry,
   type TopProduct,
   type CustomerStats,
-} from "../../../../api/dashboard";
+} from "../../../../api/analytics/dashboard";
 
 interface LoadingState {
   summary: boolean;

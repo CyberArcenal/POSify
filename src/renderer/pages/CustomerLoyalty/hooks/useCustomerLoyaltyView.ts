@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
-import loyaltyAPI, { type LoyaltyTransaction } from "../../../api/loyalty";
-import customerAPI, { type Customer } from "../../../api/customer";
+import loyaltyAPI, {
+  type LoyaltyTransaction,
+} from "../../../api/utils/loyalty";
+import customerAPI, { type Customer } from "../../../api/utils/customer";
 
 export const useCustomerLoyaltyView = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +22,10 @@ export const useCustomerLoyaltyView = () => {
       }
 
       // Fetch loyalty transactions for this customer
-      const txResponse = await loyaltyAPI.getByCustomer({ customerId, limit: 100 });
+      const txResponse = await loyaltyAPI.getByCustomer({
+        customerId,
+        limit: 100,
+      });
       if (txResponse.status) {
         setTransactions(txResponse.data);
       }

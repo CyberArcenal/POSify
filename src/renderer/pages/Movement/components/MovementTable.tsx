@@ -1,7 +1,10 @@
 import React from "react";
 import { Eye, Package } from "lucide-react";
-import { type InventoryMovement } from "../../../api/inventory";
-import { formatMovementType, getMovementTypeColor } from "../hooks/useMovements";
+import { type InventoryMovement } from "../../../api/utils/inventory";
+import {
+  formatMovementType,
+  getMovementTypeColor,
+} from "../hooks/useMovements";
 
 interface MovementTableProps {
   movements: InventoryMovement[];
@@ -16,7 +19,9 @@ export const MovementTable: React.FC<MovementTableProps> = ({
     return (
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-8 text-center">
         <Package className="w-12 h-12 mx-auto mb-3 text-[var(--text-tertiary)]" />
-        <p className="text-[var(--text-primary)] font-medium">No movements found</p>
+        <p className="text-[var(--text-primary)] font-medium">
+          No movements found
+        </p>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Try adjusting your filters
         </p>
@@ -31,15 +36,33 @@ export const MovementTable: React.FC<MovementTableProps> = ({
         <table className="w-full table-fixed">
           <thead className="bg-[var(--table-header-bg)] sticky top-0 z-10">
             <tr>
-              <th className="w-20 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">ID</th>
-              <th className="w-36 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Date & Time</th>
-              <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Product</th>
-              <th className="w-20 px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Quantity</th>
-              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Type</th>
-              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Source</th>
-              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Destination</th>
-              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">User</th>
-              <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Actions</th>
+              <th className="w-20 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                ID
+              </th>
+              <th className="w-36 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Date & Time
+              </th>
+              <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Product
+              </th>
+              <th className="w-20 px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Quantity
+              </th>
+              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Type
+              </th>
+              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Source
+              </th>
+              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Destination
+              </th>
+              <th className="w-24 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                User
+              </th>
+              <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--border-color)]">
@@ -49,14 +72,18 @@ export const MovementTable: React.FC<MovementTableProps> = ({
                 className="hover:bg-[var(--table-row-hover)] transition-colors cursor-pointer"
                 onClick={() => onView(movement)}
               >
-                <td className="w-20 px-4 py-3 text-sm font-mono text-[var(--text-primary)]">#{movement.id}</td>
+                <td className="w-20 px-4 py-3 text-sm font-mono text-[var(--text-primary)]">
+                  #{movement.id}
+                </td>
                 <td className="w-36 px-4 py-3 text-sm text-[var(--text-secondary)]">
                   {new Date(movement.timestamp).toLocaleString()}
                 </td>
                 <td className="w-1/4 px-4 py-3 text-sm text-[var(--text-secondary)] font-medium">
                   {movement.product ? (
                     <div>
-                      <span className="font-mono text-[var(--text-tertiary)]">{movement.product.sku}</span>
+                      <span className="font-mono text-[var(--text-tertiary)]">
+                        {movement.product.sku}
+                      </span>
                       <br />
                       <span>{movement.product.name}</span>
                     </div>
@@ -88,15 +115,24 @@ export const MovementTable: React.FC<MovementTableProps> = ({
                   </span>
                 </td>
                 <td className="w-24 px-4 py-3 text-sm text-[var(--text-secondary)]">
-                  {movement.notes?.includes("source:") ? movement.notes.split("source:")[1] : "System"}
+                  {movement.notes?.includes("source:")
+                    ? movement.notes.split("source:")[1]
+                    : "System"}
                 </td>
                 <td className="w-24 px-4 py-3 text-sm text-[var(--text-secondary)]">
-                  {movement.notes?.includes("dest:") ? movement.notes.split("dest:")[1] : "System"}
+                  {movement.notes?.includes("dest:")
+                    ? movement.notes.split("dest:")[1]
+                    : "System"}
                 </td>
-                <td className="w-24 px-4 py-3 text-sm text-[var(--text-secondary)]">System</td>
+                <td className="w-24 px-4 py-3 text-sm text-[var(--text-secondary)]">
+                  System
+                </td>
                 <td className="w-20 px-4 py-3 text-center">
                   <button
-                    onClick={(e) => { e.stopPropagation(); onView(movement); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onView(movement);
+                    }}
                     className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-blue)]"
                     title="View Details"
                   >

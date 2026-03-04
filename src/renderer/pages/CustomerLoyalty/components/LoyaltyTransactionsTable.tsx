@@ -1,6 +1,6 @@
 import React from "react";
 import { Eye, Award, TrendingDown } from "lucide-react";
-import { type LoyaltyTransaction } from "../../../api/loyalty";
+import { type LoyaltyTransaction } from "../../../api/utils/loyalty";
 import Decimal from "decimal.js";
 
 interface LoyaltyTransactionsTableProps {
@@ -8,15 +8,16 @@ interface LoyaltyTransactionsTableProps {
   onViewCustomer: (customerId: number) => void;
 }
 
-export const LoyaltyTransactionsTable: React.FC<LoyaltyTransactionsTableProps> = ({
-  transactions,
-  onViewCustomer,
-}) => {
+export const LoyaltyTransactionsTable: React.FC<
+  LoyaltyTransactionsTableProps
+> = ({ transactions, onViewCustomer }) => {
   if (transactions.length === 0) {
     return (
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-8 text-center">
         <Award className="w-12 h-12 mx-auto mb-3 text-[var(--text-tertiary)]" />
-        <p className="text-[var(--text-primary)] font-medium">No loyalty transactions found</p>
+        <p className="text-[var(--text-primary)] font-medium">
+          No loyalty transactions found
+        </p>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Try adjusting your filters or add a new transaction
         </p>
@@ -30,14 +31,30 @@ export const LoyaltyTransactionsTable: React.FC<LoyaltyTransactionsTableProps> =
       <table className="w-full table-fixed">
         <thead className="bg-[var(--table-header-bg)]">
           <tr>
-            <th className="w-20 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">ID</th>
-            <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Customer</th>
-            <th className="w-36 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Date</th>
-            <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Type</th>
-            <th className="w-24 px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Points</th>
-            <th className="w-24 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Sale ID</th>
-            <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Notes</th>
-            <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">Actions</th>
+            <th className="w-20 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              ID
+            </th>
+            <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Customer
+            </th>
+            <th className="w-36 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Date
+            </th>
+            <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Type
+            </th>
+            <th className="w-24 px-4 py-3 text-right text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Points
+            </th>
+            <th className="w-24 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Sale ID
+            </th>
+            <th className="w-1/4 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Notes
+            </th>
+            <th className="w-20 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Actions
+            </th>
           </tr>
         </thead>
       </table>
@@ -47,8 +64,17 @@ export const LoyaltyTransactionsTable: React.FC<LoyaltyTransactionsTableProps> =
         <table className="w-full table-fixed">
           <tbody className="divide-y divide-[var(--border-color)]">
             {transactions.map((tx) => (
-              <tr key={tx.id} className="hover:bg-[var(--table-row-hover)] transition-colors" onClick={(e) => {e.stopPropagation(); onViewCustomer(tx.customer?.id!)}}>
-                <td className="w-20 px-4 py-3 text-sm font-mono text-[var(--text-primary)]">#{tx.id}</td>
+              <tr
+                key={tx.id}
+                className="hover:bg-[var(--table-row-hover)] transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewCustomer(tx.customer?.id!);
+                }}
+              >
+                <td className="w-20 px-4 py-3 text-sm font-mono text-[var(--text-primary)]">
+                  #{tx.id}
+                </td>
                 <td className="w-1/4 px-4 py-3 text-sm text-[var(--text-secondary)] font-medium">
                   {tx.customer?.name || `Customer #${tx.customerId}`}
                 </td>
@@ -69,8 +95,15 @@ export const LoyaltyTransactionsTable: React.FC<LoyaltyTransactionsTableProps> =
                   )}
                 </td>
                 <td className="w-24 px-4 py-3 text-right text-sm font-semibold">
-                  <span className={tx.pointsChange > 0 ? "text-[var(--accent-green)]" : "text-[var(--accent-red)]"}>
-                    {tx.pointsChange > 0 ? "+" : ""}{tx.pointsChange}
+                  <span
+                    className={
+                      tx.pointsChange > 0
+                        ? "text-[var(--accent-green)]"
+                        : "text-[var(--accent-red)]"
+                    }
+                  >
+                    {tx.pointsChange > 0 ? "+" : ""}
+                    {tx.pointsChange}
                   </span>
                 </td>
                 <td className="w-24 px-4 py-3 text-center text-sm text-[var(--text-secondary)]">
@@ -91,7 +124,10 @@ export const LoyaltyTransactionsTable: React.FC<LoyaltyTransactionsTableProps> =
                 </td>
                 <td className="w-20 px-4 py-3 text-center">
                   <button
-                    onClick={(e) => {e.stopPropagation(); onViewCustomer(tx.customer?.id!)}}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewCustomer(tx.customer?.id!);
+                    }}
                     className="p-1 hover:bg-[var(--card-hover-bg)] rounded text-[var(--text-tertiary)] hover:text-[var(--accent-blue)]"
                     title="View Customer Loyalty"
                   >

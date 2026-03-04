@@ -551,6 +551,14 @@ async function createMainWindow() {
       throw new Error(errorMessage);
     }
 
+    try {
+      const updaterModule = require("./ipc/utils/updater/index.ipc.js");
+      updaterModule.setMainWindow(mainWindow);
+      log(LogLevel.INFO, "Updater handler attached to main window");
+    } catch (e) {
+      log(LogLevel.WARN, "Failed to set updater main window", e);
+    }
+
     return mainWindow;
   } catch (error) {
     throw new WindowError(
@@ -843,6 +851,7 @@ function registerIpcHandlers() {
       "./ipc/analytics/sales/index.ipc.js",
       "./ipc/barcode/index.ipc.js",
       "./ipc/notification/index.ipc.js",
+      "./ipc/utils/updater/index.ipc.js",
     ];
 
     ipcModules.forEach((modulePath) => {

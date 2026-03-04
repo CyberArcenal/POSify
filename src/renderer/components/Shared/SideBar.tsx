@@ -1,7 +1,7 @@
 // components/Sidebar.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { version } from "../../../../package.json";
+import { version, name } from "../../../../package.json";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -39,9 +39,9 @@ import {
   Building2,
   ComputerIcon,
 } from "lucide-react";
-import dashboardAPI from "../../api/dashboard";
+import dashboardAPI from "../../api/analytics/dashboard";
 import { formatCurrency } from "../../utils/formatters";
-import systemConfigAPI from "../../api/system_config";
+import systemConfigAPI from "../../api/utils/system_config";
 import { useSettings } from "../../contexts/SettingsContext";
 
 interface SidebarProps {
@@ -55,9 +55,15 @@ interface MenuItem {
   category?: string;
   children?: MenuItem[];
 }
-
+export function toTitleCase(str: string) {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
+  );
+}
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const location = useLocation();
+  const title = toTitleCase(name);
   const { settings, getSetting, updateSetting } = useSettings();
   const companyName = getSetting("general", "company_name", "Default Name");
 
@@ -360,7 +366,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     <div
       className={`
     fixed md:relative
-    flex flex-col h-screen           {/* ← essential for scrolling */}
+    flex flex-col h-screen
     bg-gradient-to-b from-[var(--sidebar-bg)] to-[#1e293b]
     border-r border-[var(--sidebar-border)]
     shadow-xl
@@ -446,7 +452,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
       {/* Footer - Fixed height */}
       <div className="p-4 border-t border-[var(--border-color)] text-center flex-shrink-0 bg-gradient-to-r from-[var(--sidebar-bg)] to-[#1e293b]">
         <p className="text-xs text-[var(--text-tertiary)] mb-2">
-          v{version} • © {new Date().getFullYear()} Tillify
+          {version} • © {new Date().getFullYear()} Tillify
         </p>
         <div className="flex justify-center gap-4">
           <button
@@ -456,7 +462,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             <HelpCircle className="w-4 h-4" />
           </button>
           <Link
-            to="/settings/general"
+            to="system/settings"
             className="text-[var(--text-tertiary)] hover:text-[var(--accent-blue)] hover:bg-[var(--accent-blue)]/10 p-1.5 rounded-full transition-colors duration-200"
             title="Settings"
           >

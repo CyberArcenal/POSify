@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import loyaltyAPI from '../../../api/loyalty';
+import { useState, useEffect } from "react";
+import loyaltyAPI from "../../../api/utils/loyalty";
 
 export const useLoyalty = (customerId?: number) => {
   const [loyaltyPointsAvailable, setLoyaltyPointsAvailable] = useState(0);
@@ -15,7 +15,7 @@ export const useLoyalty = (customerId?: number) => {
           setLoyaltyPointsAvailable(res.data.customer.loyaltyPointsBalance);
         })
         .catch((err) => {
-          console.error('Failed to fetch loyalty points', err);
+          console.error("Failed to fetch loyalty points", err);
           setLoyaltyPointsAvailable(0);
         });
     } else {

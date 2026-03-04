@@ -1,4 +1,4 @@
-import type { Sale } from "../api/sale";
+import type { Sale } from "../api/utils/sale";
 
 export {};
 
@@ -89,6 +89,19 @@ declare global {
       }) => Promise<{ status: boolean; message?: string }>;
       onBarcodeScanned: (callback: (barcode: string) => void) => void;
       offBarcodeScanned: (callback: (barcode: string) => void) => void;
+
+      // 🆕 Updater API (invoke)
+      updater: (payload: { method: string; params?: any }) => Promise<{
+        status: boolean;
+        message: string;
+        data: any;
+      }>;
+
+      // 🎧 Generic event listener (returns cleanup function)
+      on: (
+        channel: string,
+        callback: (event: any, ...args: any[]) => void,
+      ) => () => void;
 
       // 🛠️ Logging
       log: {

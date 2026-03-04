@@ -1,6 +1,6 @@
 // src/renderer/components/dashboard/CustomerStats.tsx
 import React from "react";
-import { type CustomerStats as CustomerStatsType } from "../../../../api/dashboard";
+import { type CustomerStats as CustomerStatsType } from "../../../../api/analytics/dashboard";
 
 interface Props {
   stats: CustomerStatsType | null;

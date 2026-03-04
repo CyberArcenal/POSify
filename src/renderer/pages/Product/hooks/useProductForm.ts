@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Product } from "../../../api/product";
+import { type Product } from "../../../api/utils/product";
 
 export interface ProductFormData {
   barcode?: string;

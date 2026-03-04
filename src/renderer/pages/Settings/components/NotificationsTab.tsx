@@ -1,5 +1,5 @@
 import React from "react";
-import type { NotificationsSettings } from "../../../api/system_config";
+import type { NotificationsSettings } from "../../../api/utils/system_config";
 
 interface Props {
   settings: NotificationsSettings;
@@ -16,7 +16,9 @@ const NotificationsTab: React.FC<Props> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Notification Settings</h3>
+      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+        Notification Settings
+      </h3>
 
       {/* General toggles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -28,7 +30,10 @@ const NotificationsTab: React.FC<Props> = ({
             onChange={(e) => onUpdate("email_enabled", e.target.checked)}
             className="windows-checkbox"
           />
-          <label htmlFor="email_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="email_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Email Notifications
           </label>
         </div>
@@ -41,7 +46,10 @@ const NotificationsTab: React.FC<Props> = ({
             onChange={(e) => onUpdate("sms_enabled", e.target.checked)}
             className="windows-checkbox"
           />
-          <label htmlFor="sms_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="sms_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable SMS Notifications
           </label>
         </div>
@@ -51,10 +59,15 @@ const NotificationsTab: React.FC<Props> = ({
             type="checkbox"
             id="push_notifications_enabled"
             checked={settings.push_notifications_enabled || false}
-            onChange={(e) => onUpdate("push_notifications_enabled", e.target.checked)}
+            onChange={(e) =>
+              onUpdate("push_notifications_enabled", e.target.checked)
+            }
             className="windows-checkbox"
           />
-          <label htmlFor="push_notifications_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="push_notifications_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Push Notifications
           </label>
         </div>
@@ -64,10 +77,15 @@ const NotificationsTab: React.FC<Props> = ({
             type="checkbox"
             id="low_stock_alert_enabled"
             checked={settings.low_stock_alert_enabled || false}
-            onChange={(e) => onUpdate("low_stock_alert_enabled", e.target.checked)}
+            onChange={(e) =>
+              onUpdate("low_stock_alert_enabled", e.target.checked)
+            }
             className="windows-checkbox"
           />
-          <label htmlFor="low_stock_alert_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="low_stock_alert_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Low Stock Alerts
           </label>
         </div>
@@ -77,10 +95,15 @@ const NotificationsTab: React.FC<Props> = ({
             type="checkbox"
             id="daily_sales_summary_enabled"
             checked={settings.daily_sales_summary_enabled || false}
-            onChange={(e) => onUpdate("daily_sales_summary_enabled", e.target.checked)}
+            onChange={(e) =>
+              onUpdate("daily_sales_summary_enabled", e.target.checked)
+            }
             className="windows-checkbox"
           />
-          <label htmlFor="daily_sales_summary_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="daily_sales_summary_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Daily Sales Summary
           </label>
         </div>
@@ -88,7 +111,9 @@ const NotificationsTab: React.FC<Props> = ({
 
       {/* Email SMTP Settings */}
       <div className="border-t border-[var(--border-color)] pt-4">
-        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">Email (SMTP) Settings</h4>
+        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">
+          Email (SMTP) Settings
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
@@ -109,7 +134,9 @@ const NotificationsTab: React.FC<Props> = ({
             <input
               type="number"
               value={settings.email_smtp_port || 587}
-              onChange={(e) => onUpdate("email_smtp_port", parseInt(e.target.value) || 0)}
+              onChange={(e) =>
+                onUpdate("email_smtp_port", parseInt(e.target.value) || 0)
+              }
               className="windows-input w-full"
               placeholder="587"
             />
@@ -139,7 +166,9 @@ const NotificationsTab: React.FC<Props> = ({
 
       {/* SMS (Twilio) Settings */}
       <div className="border-t border-[var(--border-color)] pt-4">
-        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">SMS (Twilio) Settings</h4>
+        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">
+          SMS (Twilio) Settings
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
@@ -194,7 +223,9 @@ const NotificationsTab: React.FC<Props> = ({
             <input
               type="text"
               value={settings.twilio_messaging_service_sid || ""}
-              onChange={(e) => onUpdate("twilio_messaging_service_sid", e.target.value)}
+              onChange={(e) =>
+                onUpdate("twilio_messaging_service_sid", e.target.value)
+              }
               className="windows-input w-full"
             />
           </div>
@@ -203,17 +234,24 @@ const NotificationsTab: React.FC<Props> = ({
 
       {/* Supplier Notifications */}
       <div className="border-t border-[var(--border-color)] pt-4">
-        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">Supplier Notifications</h4>
+        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">
+          Supplier Notifications
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="notify_supplier_with_sms"
               checked={settings.notify_supplier_with_sms || false}
-              onChange={(e) => onUpdate("notify_supplier_with_sms", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_with_sms", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_with_sms" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_with_sms"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier via SMS (on order)
             </label>
           </div>
@@ -222,10 +260,15 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_supplier_with_email"
               checked={settings.notify_supplier_with_email || false}
-              onChange={(e) => onUpdate("notify_supplier_with_email", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_with_email", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_with_email" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_with_email"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier via Email (on order)
             </label>
           </div>
@@ -234,10 +277,15 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_supplier_on_complete_email"
               checked={settings.notify_supplier_on_complete_email || false}
-              onChange={(e) => onUpdate("notify_supplier_on_complete_email", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_on_complete_email", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_on_complete_email" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_on_complete_email"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier on Complete (Email)
             </label>
           </div>
@@ -246,10 +294,15 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_supplier_on_complete_sms"
               checked={settings.notify_supplier_on_complete_sms || false}
-              onChange={(e) => onUpdate("notify_supplier_on_complete_sms", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_on_complete_sms", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_on_complete_sms" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_on_complete_sms"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier on Complete (SMS)
             </label>
           </div>
@@ -258,10 +311,15 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_supplier_on_cancel_email"
               checked={settings.notify_supplier_on_cancel_email || false}
-              onChange={(e) => onUpdate("notify_supplier_on_cancel_email", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_on_cancel_email", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_on_cancel_email" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_on_cancel_email"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier on Cancel (Email)
             </label>
           </div>
@@ -270,10 +328,15 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_supplier_on_cancel_sms"
               checked={settings.notify_supplier_on_cancel_sms || false}
-              onChange={(e) => onUpdate("notify_supplier_on_cancel_sms", e.target.checked)}
+              onChange={(e) =>
+                onUpdate("notify_supplier_on_cancel_sms", e.target.checked)
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_supplier_on_cancel_sms" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_supplier_on_cancel_sms"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Supplier on Cancel (SMS)
             </label>
           </div>
@@ -282,17 +345,27 @@ const NotificationsTab: React.FC<Props> = ({
 
       {/* Customer Return Notifications */}
       <div className="border-t border-[var(--border-color)] pt-4">
-        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">Customer Return Notifications</h4>
+        <h4 className="text-md font-medium text-[var(--text-primary)] mb-3">
+          Customer Return Notifications
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
               id="notify_customer_return_processed_email"
               checked={settings.notify_customer_return_processed_email || false}
-              onChange={(e) => onUpdate("notify_customer_return_processed_email", e.target.checked)}
+              onChange={(e) =>
+                onUpdate(
+                  "notify_customer_return_processed_email",
+                  e.target.checked,
+                )
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_customer_return_processed_email" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_customer_return_processed_email"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Customer when Return Processed (Email)
             </label>
           </div>
@@ -301,10 +374,18 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_customer_return_processed_sms"
               checked={settings.notify_customer_return_processed_sms || false}
-              onChange={(e) => onUpdate("notify_customer_return_processed_sms", e.target.checked)}
+              onChange={(e) =>
+                onUpdate(
+                  "notify_customer_return_processed_sms",
+                  e.target.checked,
+                )
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_customer_return_processed_sms" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_customer_return_processed_sms"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Customer when Return Processed (SMS)
             </label>
           </div>
@@ -313,10 +394,18 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_customer_return_cancelled_email"
               checked={settings.notify_customer_return_cancelled_email || false}
-              onChange={(e) => onUpdate("notify_customer_return_cancelled_email", e.target.checked)}
+              onChange={(e) =>
+                onUpdate(
+                  "notify_customer_return_cancelled_email",
+                  e.target.checked,
+                )
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_customer_return_cancelled_email" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_customer_return_cancelled_email"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Customer when Return Cancelled (Email)
             </label>
           </div>
@@ -325,10 +414,18 @@ const NotificationsTab: React.FC<Props> = ({
               type="checkbox"
               id="notify_customer_return_cancelled_sms"
               checked={settings.notify_customer_return_cancelled_sms || false}
-              onChange={(e) => onUpdate("notify_customer_return_cancelled_sms", e.target.checked)}
+              onChange={(e) =>
+                onUpdate(
+                  "notify_customer_return_cancelled_sms",
+                  e.target.checked,
+                )
+              }
               className="windows-checkbox"
             />
-            <label htmlFor="notify_customer_return_cancelled_sms" className="text-sm text-[var(--text-secondary)]">
+            <label
+              htmlFor="notify_customer_return_cancelled_sms"
+              className="text-sm text-[var(--text-secondary)]"
+            >
               Notify Customer when Return Cancelled (SMS)
             </label>
           </div>

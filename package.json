@@ -1,7 +1,7 @@
 {
   "name": "tillify",
   "private": true,
-  "version": "0.0.2-beta",
+  "version": "v0.0.4-beta",
   "main": "src/main/index.js",
   "author": {
     "name": "CyberArcenal",
@@ -19,20 +19,28 @@
     },
     "win": {
       "icon": "build/icon.ico",
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "mac": {
       "icon": "build/icon.icns",
-      "target": "dmg"
+      "target": "dmg",
+      "artifactName": "${productName}-${version}.${ext}"
     },
     "linux": {
       "icon": "build/icon.png",
       "target": [
         "AppImage",
         "deb"
-      ]
+      ],
+      "artifactName": "${productName}-${version}.${ext}"
     },
-    "publish": null
+    "publish": {
+      "provider": "github",
+      "owner": "CyberArcenal",
+      "repo": "Tillify",
+      "releaseType": "release"
+    }
   },
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
@@ -46,7 +54,7 @@
     "migration:run": "npx typeorm migration:run -d src/main/db/datasource.js",
     "migration:revert": "npx typeorm migration:revert -d src/main/db/datasource.js",
     "dev": "cross-env NODE_ENV=development concurrently \"vite\" \"tsc -w -p tsconfig.main.json\" \"electron ./src/main/index.js\"",
-    "build": "vite build && electron-builder",
+    "build": "vite build && electron-builder --publish never",
     "dist:win": "vite build && electron-builder --win",
     "dist:mac": "vite build && electron-builder --mac",
     "dist:linux": "vite build && electron-builder --linux",
@@ -62,6 +70,7 @@
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "decimal.js": "^10.6.0",
+    "electron-updater": "^6.8.3",
     "escpos": "^3.0.0-alpha.6",
     "escpos-usb": "^3.0.0-alpha.4",
     "lucide-react": "^0.562.0",

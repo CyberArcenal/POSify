@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { X, Loader2, PackagePlus } from "lucide-react";
 import Decimal from "decimal.js";
-import productAPI from "../../../api/product";
+import productAPI from "../../../api/utils/product";
 import { dialogs } from "../../../utils/dialogs";
-import type { Product } from "../../../api/product";
+import type { Product } from "../../../api/utils/product";
 
 interface StockAdjustDialogProps {
   product: Product | null;
@@ -51,7 +51,7 @@ export const StockAdjustDialog: React.FC<StockAdjustDialogProps> = ({
           notes: notes.trim() || null,
           saleId: null,
         },
-        "system"
+        "system",
       );
 
       if (response.status) {
@@ -107,13 +107,16 @@ export const StockAdjustDialog: React.FC<StockAdjustDialogProps> = ({
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
-                Quantity Change <span className="text-[var(--accent-red)]">*</span>
+                Quantity Change{" "}
+                <span className="text-[var(--accent-red)]">*</span>
               </label>
               <input
                 type="number"
                 step="1"
                 value={quantityChange}
-                onChange={(e) => setQuantityChange(parseInt(e.target.value) || 0)}
+                onChange={(e) =>
+                  setQuantityChange(parseInt(e.target.value) || 0)
+                }
                 placeholder="e.g., 10 (increase) or -5 (decrease)"
                 className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-[var(--text-primary)]"
                 required

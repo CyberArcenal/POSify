@@ -1,24 +1,26 @@
 // src/renderer/pages/supplier/hooks/useSupplierForm.ts
-import { useState } from 'react';
-import type { Supplier } from '../../../api/supplier';
+import { useState } from "react";
+import type { Supplier } from "../../../api/utils/supplier";
 
-export type FormMode = 'add' | 'edit';
+export type FormMode = "add" | "edit";
 
 export function useSupplierForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<FormMode>('add');
+  const [mode, setMode] = useState<FormMode>("add");
   const [supplierId, setSupplierId] = useState<number | undefined>();
-  const [initialData, setInitialData] = useState<Partial<Supplier> | undefined>();
+  const [initialData, setInitialData] = useState<
+    Partial<Supplier> | undefined
+  >();
 
   const openAdd = () => {
-    setMode('add');
+    setMode("add");
     setSupplierId(undefined);
     setInitialData(undefined);
     setIsOpen(true);
   };
 
   const openEdit = (supplier: Supplier) => {
-    setMode('edit');
+    setMode("edit");
     setSupplierId(supplier.id);
     setInitialData(supplier);
     setIsOpen(true);
@@ -26,7 +28,7 @@ export function useSupplierForm() {
 
   const close = () => {
     setIsOpen(false);
-    setMode('add');
+    setMode("add");
     setSupplierId(undefined);
     setInitialData(undefined);
   };

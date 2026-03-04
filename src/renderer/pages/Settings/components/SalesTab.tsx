@@ -1,6 +1,6 @@
 // src/renderer/pages/Settings/components/SalesTab.tsx
 import React from "react";
-import { type SalesSettings } from "../../../api/system_config";
+import { type SalesSettings } from "../../../api/utils/system_config";
 
 interface Props {
   settings: SalesSettings;
@@ -10,7 +10,9 @@ interface Props {
 const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">Sales Settings</h3>
+      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+        Sales Settings
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex items-center gap-2">
           <input
@@ -20,7 +22,10 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
             onChange={(e) => onUpdate("discount_enabled", e.target.checked)}
             className="windows-checkbox"
           />
-          <label htmlFor="discount_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="discount_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Discounts
           </label>
         </div>
@@ -32,7 +37,9 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
           <input
             type="number"
             value={settings.max_discount_percent ?? 50}
-            onChange={(e) => onUpdate("max_discount_percent", parseFloat(e.target.value) || 0)}
+            onChange={(e) =>
+              onUpdate("max_discount_percent", parseFloat(e.target.value) || 0)
+            }
             className="windows-input w-full"
             min="0"
             max="100"
@@ -47,7 +54,10 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
             onChange={(e) => onUpdate("allow_refunds", e.target.checked)}
             className="windows-checkbox"
           />
-          <label htmlFor="allow_refunds" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="allow_refunds"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Allow Refunds
           </label>
         </div>
@@ -59,7 +69,9 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
           <input
             type="number"
             value={settings.refund_window_days ?? 7}
-            onChange={(e) => onUpdate("refund_window_days", parseInt(e.target.value) || 0)}
+            onChange={(e) =>
+              onUpdate("refund_window_days", parseInt(e.target.value) || 0)
+            }
             className="windows-input w-full"
             min="0"
           />
@@ -70,10 +82,15 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
             type="checkbox"
             id="loyalty_points_enabled"
             checked={settings.loyalty_points_enabled || false}
-            onChange={(e) => onUpdate("loyalty_points_enabled", e.target.checked)}
+            onChange={(e) =>
+              onUpdate("loyalty_points_enabled", e.target.checked)
+            }
             className="windows-checkbox"
           />
-          <label htmlFor="loyalty_points_enabled" className="text-sm text-[var(--text-secondary)]">
+          <label
+            htmlFor="loyalty_points_enabled"
+            className="text-sm text-[var(--text-secondary)]"
+          >
             Enable Loyalty Points
           </label>
         </div>
@@ -85,7 +102,9 @@ const SalesTab: React.FC<Props> = ({ settings, onUpdate }) => {
           <input
             type="number"
             value={settings.loyalty_points_rate ?? 1}
-            onChange={(e) => onUpdate("loyalty_points_rate", parseFloat(e.target.value) || 0)}
+            onChange={(e) =>
+              onUpdate("loyalty_points_rate", parseFloat(e.target.value) || 0)
+            }
             className="windows-input w-full"
             min="0"
             step="0.01"

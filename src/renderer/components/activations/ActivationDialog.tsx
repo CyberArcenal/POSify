@@ -22,8 +22,8 @@ import {
   ArrowRight,
   LogOut
 } from 'lucide-react';
-import type { ActivationStatusData, DeviceInfoData } from '../../api/activation';
-import activationAPI from '../../api/activation';
+import type { ActivationStatusData, DeviceInfoData } from '../../api/utils/activation';
+import activationAPI from '../../api/utils/activation';
 import { dialogs } from '../../utils/dialogs';
 
 

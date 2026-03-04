@@ -2,9 +2,9 @@ import React from "react";
 import { X, Loader2, TrendingUp, History, Check } from "lucide-react";
 import Decimal from "decimal.js";
 import { format } from "date-fns";
-import { type Product } from "../../../api/product";
-import { type InventoryMovement } from "../../../api/inventory";
-import { type ProductSalesReportItem } from "../../../api/product";
+import { type Product } from "../../../api/utils/product";
+import { type InventoryMovement } from "../../../api/utils/inventory";
+import { type ProductSalesReportItem } from "../../../api/utils/product";
 
 // Reuse status badge and stock badge
 const StatusBadge: React.FC<{ active: boolean }> = ({ active }) => {
@@ -95,7 +95,9 @@ export const ProductViewDialog: React.FC<ProductViewDialogProps> = ({
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-[var(--text-tertiary)]">Status</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      Status
+                    </p>
                     <StatusBadge active={product.isActive} />
                   </div>
                   <div className="col-span-2">
@@ -151,13 +153,17 @@ export const ProductViewDialog: React.FC<ProductViewDialogProps> = ({
                   </div>
 
                   <div>
-                    <p className="text-xs text-[var(--text-tertiary)]">Category</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      Category
+                    </p>
                     <p className="text-sm text-[var(--text-secondary)]">
                       {product.category?.name ?? "—"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-[var(--text-tertiary)]">Created</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
+                      Created
+                    </p>
                     <p className="text-sm text-[var(--text-secondary)]">
                       {format(new Date(product.createdAt), "MMM dd, yyyy")}
                     </p>

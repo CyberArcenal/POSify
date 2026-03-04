@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Search, ChevronDown, Package, X } from "lucide-react";
-import type { Product } from "../../../api/product";
-import productAPI from "../../../api/product";
+import type { Product } from "../../../api/utils/product";
+import productAPI from "../../../api/utils/product";
 
 interface ProductSelectProps {
   value: number | null;

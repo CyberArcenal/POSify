@@ -1,13 +1,17 @@
 import { useState, useCallback } from "react";
-import customerAPI, { type Customer } from "../../../api/customer";
-import saleAPI, { type Sale } from "../../../api/sale";
-import loyaltyAPI, { type LoyaltyTransaction } from "../../../api/loyalty";
+import customerAPI, { type Customer } from "../../../api/utils/customer";
+import saleAPI, { type Sale } from "../../../api/utils/sale";
+import loyaltyAPI, {
+  type LoyaltyTransaction,
+} from "../../../api/utils/loyalty";
 
 export const useCustomerView = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [sales, setSales] = useState<Sale[]>([]);
-  const [loyaltyTransactions, setLoyaltyTransactions] = useState<LoyaltyTransaction[]>([]);
+  const [loyaltyTransactions, setLoyaltyTransactions] = useState<
+    LoyaltyTransaction[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   const open = useCallback(async (customer: Customer) => {
@@ -17,13 +21,19 @@ export const useCustomerView = () => {
 
     try {
       // Fetch customer's sales
-      const salesResponse = await saleAPI.getByCustomer({ customerId: customer.id, limit: 50 });
+      const salesResponse = await saleAPI.getByCustomer({
+        customerId: customer.id,
+        limit: 50,
+      });
       if (salesResponse.status) {
         setSales(salesResponse.data);
       }
 
       // Fetch loyalty transactions
-      const loyaltyResponse = await loyaltyAPI.getByCustomer({ customerId: customer.id, limit: 50 });
+      const loyaltyResponse = await loyaltyAPI.getByCustomer({
+        customerId: customer.id,
+        limit: 50,
+      });
       if (loyaltyResponse.status) {
         setLoyaltyTransactions(loyaltyResponse.data);
       }
