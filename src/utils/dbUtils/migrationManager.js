@@ -3,8 +3,8 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { app } = require("electron");
-const { getDatabaseConfig } = require("../../main/db/database");
 const notificationService = require("../../services/NotificationService");
+
 
 class MigrationManager {
   /**
@@ -19,6 +19,7 @@ class MigrationManager {
    * @returns {string | null}
    */
   _getDatabasePath() {
+    const { getDatabaseConfig } = require("../../main/db/database");
     const config = getDatabaseConfig();
     // config.database ang absolute path (sa production) o relative (sa dev)
     // Siguraduhing absolute ang path para sa copyFile

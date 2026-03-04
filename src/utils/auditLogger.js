@@ -1,6 +1,6 @@
 //@ts-check
 const { AuditLog } = require('../entities/AuditLog');
-const { AppDataSource } = require('../main/db/datasource');
+
 // const { auditTrailEnabled } = require('./system');
 
 
@@ -11,6 +11,7 @@ class AuditLogger {
   }
 
   async initialize() {
+    const { AppDataSource } = require('../main/db/datasource');
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
     }

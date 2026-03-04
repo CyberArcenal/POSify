@@ -28,7 +28,8 @@ require("reflect-metadata");
 const MigrationManager = require("../utils/dbUtils/migrationManager");
 const PrinterService = require("../services/PrinterService");
 const CashDrawerService = require("../services/CashDrawerService");
-const { AppDataSource } = require("./db/datasource.js");
+
+
 
 // ===================== TYPE DEFINITIONS =====================
 /**
@@ -247,6 +248,7 @@ function setupGlobalErrorHandlers() {
 // ===================== DATABASE SERVICE =====================
 
 async function initializeDatabase() {
+  const { AppDataSource } = require("./db/datasource.js");
   try {
     log(LogLevel.INFO, "Initializing database...");
 
@@ -318,6 +320,7 @@ async function initializeDatabase() {
  * Safely close database connection
  */
 async function safeCloseDatabase() {
+  const { AppDataSource } = require("./db/datasource.js");
   if (isShuttingDown) return;
 
   isShuttingDown = true;
@@ -745,6 +748,7 @@ function registerIpcHandlers() {
 
   // Database Handlers
   ipcMain.handle("database:get-status", async () => {
+    const { AppDataSource } = require("./db/datasource.js");
     try {
       const isInitialized = AppDataSource.isInitialized;
       let migrationStatus = null;
