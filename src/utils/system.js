@@ -9,7 +9,7 @@ const path = require("path");
 const Decimal = require("decimal.js");
 const { logger } = require("./logger");
 const { SystemSetting, SettingType } = require("../entities/systemSettings");
-const { AppDataSource } = require("../main/db/datasource");
+
 
 // ============================================================
 // 📊 CORE GETTER FUNCTIONS
@@ -21,6 +21,7 @@ const { AppDataSource } = require("../main/db/datasource");
  * @param {string} settingType
  */
 async function getValue(key, settingType, defaultValue = null) {
+  const { AppDataSource } = require("../main/db/datasource");
   try {
     // console.log(
     //   `[DB DEBUG] getValue called for key: "${key}", type: "${settingType}"`
