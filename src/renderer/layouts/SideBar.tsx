@@ -121,7 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   }, []);
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    { path: "/", name: "Dashboard", icon: LayoutDashboard, category: "core" },
+    { path: "/dashboard", name: "Dashboard", icon: LayoutDashboard, category: "core" },
 
     {
       path: "/pos",
@@ -166,7 +166,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
       children: [
         { path: "/inventory/stock", name: "Stock Levels", icon: Layers },
         { path: "/inventory/movements", name: "Movements", icon: Shuffle },
-        { path: "/inventory/reorder", name: "Reorder & Vendors", icon: Truck },
+        // { path: "/inventory/reorder", name: "Reorder & Vendors", icon: Truck },
         {
           path: "/inventory/purchases",
           name: "Purchases",
