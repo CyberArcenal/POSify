@@ -1,6 +1,5 @@
 // services/ProductService.js
 
-
 const auditLogger = require("../utils/auditLogger");
 const {
   saveProductImage,
@@ -121,6 +120,8 @@ class ProductService {
         reorderQty = 0,
       } = productData;
 
+      console.log(productData)
+
       // Check SKU uniqueness
       // @ts-ignore
       const existing = await productRepo.findOne({ where: { sku } });
@@ -129,11 +130,13 @@ class ProductService {
       }
 
       // @ts-ignore
-      const existing_barcode = await productRepo.findOne({
-        where: { barcode },
-      });
-      if (existing_barcode) {
-        throw new Error(`Product with barcode "${barcode}" already exists`);
+      if (barcode) {
+        const existing_barcode = await productRepo.findOne({
+          where: { barcode },
+        });
+        if (existing_barcode) {
+          throw new Error(`Product with barcode "${barcode}" already exists`);
+        }
       }
 
       // I-validate ang category at supplier kung provided
@@ -899,7 +902,7 @@ function generateSKU(prefix = "PRD") {
   const random = Math.floor(Math.random() * 999)
     .toString()
     .padStart(3, "0");
-  return `${prefix}-${timestamp}-${random}`;
+  return `${prefix}-${timestamp.toLocaleUpperCase()}-${random}`;
 }
 
 // Singleton instance
