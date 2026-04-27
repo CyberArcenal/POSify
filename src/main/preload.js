@@ -73,6 +73,8 @@ contextBridge.exposeInMainWorld("backendAPI", {
   printerReload: () => ipcRenderer.invoke("printer:reload"),
   cashDrawerReload: () => ipcRenderer.invoke("cashDrawer:reload"),
 
+  notifyAppReady: () => ipcRenderer.send('app:renderer-ready'),
+
   printerStatus: () => ipcRenderer.invoke("printer:get-status"),
   printerAvailable: () => ipcRenderer.invoke("printer:is-available"),
   cashDrawerStatus: () => ipcRenderer.invoke("cashDrawer:get-status"),

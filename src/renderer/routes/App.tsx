@@ -23,7 +23,7 @@ import NotificationLogPage from "../pages/NotificationLog";
 import SettingsPage from "../pages/Settings";
 import DeviceManagerPage from "../pages/DeviceManager";
 import { Help } from "../pages/help";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LicenseModal } from "../components/Shared/LicenseModal";
 
 const ApplicationLogsPage = () => <div>📄 Application Logs (placeholder)</div>;
@@ -32,6 +32,13 @@ const PageNotFound = () => <div> Page Not Found</div>;
 
 function App() {
   const [licenseAccepted, setLicenseAccepted] = useState(false);
+
+  useEffect(() => {
+    if (window.backendAPI?.notifyAppReady) {
+      window.backendAPI.notifyAppReady();
+      console.log("Notified main process: renderer is ready");
+    }
+  }, []);
 
   const handleAccept = () => {
     setLicenseAccepted(true);

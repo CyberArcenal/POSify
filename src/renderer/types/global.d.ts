@@ -91,6 +91,8 @@ declare global {
       onBarcodeScanned: (callback: (barcode: string) => void) => void;
       offBarcodeScanned: (callback: (barcode: string) => void) => void;
 
+      notifyAppReady?: () => void;
+
       // 🆕 Updater API (invoke)
       updater: (payload: { method: string; params?: any }) => Promise<{
         status: boolean;

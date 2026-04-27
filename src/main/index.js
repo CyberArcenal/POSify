@@ -466,7 +466,7 @@ async function createMainWindow() {
   try {
     log(LogLevel.INFO, "Creating main window...");
 
-    // Calculate window position
+    // Compute window position (existing code)
     const primaryDisplay = screen.getPrimaryDisplay();
     const { width: screenWidth, height: screenHeight } =
       primaryDisplay.workAreaSize;
@@ -482,7 +482,7 @@ async function createMainWindow() {
       y,
       minWidth: 1024,
       minHeight: 768,
-      show: false,
+      show: false, // Important: hidden muna
       frame: true,
       titleBarStyle: "default",
       backgroundColor: "#ffffff",
@@ -497,82 +497,67 @@ async function createMainWindow() {
       },
     };
 
-    // @ts-ignore
     mainWindow = new BrowserWindow(windowConfig);
     mainWindow.setMenuBarVisibility(false);
     mainWindow.setTitle(`${APP_CONFIG.appName} v${APP_CONFIG.version}`);
 
-    // Window event handlers
-    mainWindow.on("ready-to-show", () => {
+    // ----- BAGONG LOGIC: hintayin ang signal mula sa React -----
+    let isSplashClosed = false;
+
+    const closeSplashAndShowMain = () => {
+      if (isSplashClosed) return;
+      isSplashClosed = true;
+
       if (splashWindow && !splashWindow.isDestroyed()) {
-        setTimeout(() => {
-          // @ts-ignore
-          splashWindow.close();
-          splashWindow = null;
-        }, 300);
+        splashWindow.close();
+        splashWindow = null;
       }
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.show();
+        mainWindow.focus();
+        log(LogLevel.SUCCESS, "Main window shown after renderer ready");
+      }
+    };
 
-      // @ts-ignore
-      mainWindow.show();
-      // @ts-ignore
-      mainWindow.focus();
-      log(LogLevel.SUCCESS, "Main window ready");
+    mainWindow.once("ready-to-show", () => {
+      log(
+        LogLevel.INFO,
+        "Main window ready-to-show, waiting for renderer-ready signal..."
+      );
 
-      // Notify renderer that app is ready
-      // @ts-ignore
-      mainWindow.webContents.send("app:ready", {
-        version: APP_CONFIG.version,
-        isDev: APP_CONFIG.isDev,
-        databaseReady: isDatabaseInitialized,
-      });
-    });
+      const timeoutId = setTimeout(() => {
+        log(
+          LogLevel.WARN,
+          "Renderer-ready timeout reached, closing splash anyway"
+        );
+        closeSplashAndShowMain();
+      }, 8000); // fallback: 8 seconds
 
-    // Handle window close with confirmation
-    mainWindow.on("close", (event) => {
-      log(LogLevel.INFO, "❌ Main window close event triggered", {
-        isShuttingDown,
-        // @ts-ignore
-        fromIPC: event.sender === mainWindow.webContents ? "renderer" : "other",
-      });
-      if (!APP_CONFIG.isDev && !isShuttingDown) {
-        event.preventDefault();
-
-        // @ts-ignore
-        const choice = dialog.showMessageBoxSync(mainWindow, {
-          type: "question",
-          buttons: ["Yes", "No"],
-          title: "Confirm",
-          message: "Are you sure you want to quit?",
-          detail: "Any unsaved changes will be lost.",
-        });
-
-        if (choice === 0) {
-          isShuttingDown = true;
-          // @ts-ignore
-          mainWindow.destroy();
+      ipcMain.once("app:renderer-ready", (event) => {
+        if (event.sender === mainWindow.webContents) {
+          log(LogLevel.INFO, "Received renderer-ready signal from React app");
+          clearTimeout(timeoutId);
+          closeSplashAndShowMain();
         }
-      }
+      });
     });
 
-    // Load application URL
     const appUrl = await getAppUrl();
     log(LogLevel.INFO, `Loading URL: ${appUrl}`);
+    await mainWindow.loadURL(appUrl);
 
-    try {
-      if (!APP_CONFIG.isDev) {
-        await mainWindow.loadURL(appUrl);
-      } else {
-        await mainWindow.loadURL(appUrl);
-        mainWindow.webContents.openDevTools({ mode: "detach" });
-      }
-      log("SUCCESS", "Main window loaded successfully");
-    } catch (error) {
-      const errorMessage = APP_CONFIG.isDev
-        ? "Dev server not running. Run 'npm run dev' first."
-        : "Production build not found or corrupted.";
-      throw new Error(errorMessage);
+    if (APP_CONFIG.isDev) {
+      mainWindow.webContents.openDevTools({ mode: "detach" });
     }
 
+    // Optional: ipaalam sa renderer ang database status
+    mainWindow.webContents.on("did-finish-load", () => {
+      mainWindow.webContents.send("app:database-status", {
+        initialized: isDatabaseInitialized,
+      });
+    });
+
+    // Attach updater (existing)
     try {
       const updaterModule = require("./ipc/utils/updater/index.ipc.js");
       updaterModule.setMainWindow(mainWindow);
@@ -584,7 +569,6 @@ async function createMainWindow() {
     return mainWindow;
   } catch (error) {
     throw new WindowError(
-      // @ts-ignore
       `Failed to create main window: ${error.message}`,
       "main"
     );
