@@ -81,6 +81,7 @@ contextBridge.exposeInMainWorld("backendAPI", {
   cashDrawerOpen: (reason = "sale") =>
     ipcRenderer.invoke("cashDrawer:open", reason),
   printerTestPrint: () => ipcRenderer.invoke("printer:test-print"),
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
 
     updater: (payload) => ipcRenderer.invoke("updater", payload),
   on: (event, callback) => {

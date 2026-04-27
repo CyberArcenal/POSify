@@ -1,6 +1,6 @@
 // components/Sidebar.tsx
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { version, name } from "../../../package.json";
 import {
   LayoutDashboard,
@@ -63,6 +63,7 @@ export function toTitleCase(str: string) {
 }
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const title = toTitleCase(name);
   const { settings, getSetting, updateSetting } = useSettings();
   const companyName = getSetting("general", "company_name", "Default Name");
@@ -456,6 +457,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         </p>
         <div className="flex justify-center gap-4">
           <button
+          onClick={()=>{navigate("/help")}}
             className="text-[var(--text-tertiary)] hover:text-[var(--accent-green)] hover:bg-[var(--accent-green)]/10 p-1.5 rounded-full transition-colors duration-200"
             title="Help"
           >

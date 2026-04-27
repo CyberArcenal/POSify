@@ -22,14 +22,47 @@ import SalesReportsPage from "../pages/Analytics/SalesReports";
 import NotificationLogPage from "../pages/NotificationLog";
 import SettingsPage from "../pages/Settings";
 import DeviceManagerPage from "../pages/DeviceManager";
+import { Help } from "../pages/help";
+import { useState } from "react";
+import { LicenseModal } from "../components/Shared/LicenseModal";
 
 const ApplicationLogsPage = () => <div>📄 Application Logs (placeholder)</div>;
 
 const PageNotFound = () => <div> Page Not Found</div>;
 
 function App() {
+  const [licenseAccepted, setLicenseAccepted] = useState(false);
+
+  const handleAccept = () => {
+    setLicenseAccepted(true);
+  };
+
+  const handleCommercialRequest = () => {
+    // Open email or external page
+    if ((window as any).backendAPI?.openExternal) {
+      (window as any).backendAPI.openExternal(
+        "mailto:cyberarcenal1@gmail.com?subject=Commercial%20License%20Inquiry"
+      );
+    } else {
+      window.open(
+        "mailto:cyberarcenal1@gmail.com?subject=Commercial%20License%20Inquiry",
+        "_blank"
+      );
+    }
+  };
+
+  // Show modal on first visit if license not accepted
+  if (!licenseAccepted && !localStorage.getItem("tillify_license_accepted")) {
+    return (
+      <LicenseModal
+        onAccept={handleAccept}
+        onCommercialRequest={handleCommercialRequest}
+      />
+    );
+  }
   return (
     <Routes>
+      <Route path="/help" element={<Help />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
 

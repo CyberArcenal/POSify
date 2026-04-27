@@ -33,12 +33,12 @@ const { registerImageProtocol } = require("./protocols/imageProtocol.js");
 
 protocol.registerSchemesAsPrivileged([
   {
-    scheme: 'app-image',
+    scheme: "app-image",
     privileges: {
-      standard: true,      // para mag‑act like http/https
-      secure: true,        // para i‑treat bilang secure (iwas mixed content)
+      standard: true, // para mag‑act like http/https
+      secure: true, // para i‑treat bilang secure (iwas mixed content)
       supportFetchAPI: true,
-      bypassCSP: true,     // optional, para iwas CORS sa images
+      bypassCSP: true, // optional, para iwas CORS sa images
     },
   },
 ]);
@@ -990,6 +990,10 @@ async function startupSequence() {
     errorWindow.show();
   }
 }
+
+ipcMain.handle("open-external", async (event, url) => {
+  await shell.openExternal(url);
+});
 
 // ===================== APPLICATION EVENT HANDLERS =====================
 app.on("ready", startupSequence);
