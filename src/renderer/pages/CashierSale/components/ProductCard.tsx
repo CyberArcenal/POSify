@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Package } from 'lucide-react';
-import Decimal from 'decimal.js';
-import type { Product } from '../types';
-import { formatCurrency } from '../../../utils/formatters';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Package } from "lucide-react";
+import Decimal from "decimal.js";
+import type { Product } from "../types";
+import { formatCurrency } from "../../../utils/formatters";
 import {
   useStockAlertThreshold,
   useAllowNegativeStock,
-} from '../../../utils/posUtils';
-import productAPI from '../../../api/core/product';
+} from "../../../utils/posUtils";
+import productAPI from "../../../api/core/product";
 
 interface ProductCardProps {
   product: Product;
@@ -17,47 +17,37 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
   const stockAlertThreshold = useStockAlertThreshold();
   const allowNegativeStock = useAllowNegativeStock();
-
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
 
   const isDisabled = !allowNegativeStock && product.stockQty === 0;
 
-  useEffect(() => {
-    if (product.image) {
-      const url = productAPI.getImageUrl?.(product.image);
-      if (url) {
-        setImageUrl(url);
-      } else {
-        setImageError(true);
-      }
-    } else {
-      setImageError(true);
-    }
-  }, [product.image]);
+  const imageUrl = useMemo(() => {
+    if (!product.image || imageError) return null;
+    return productAPI.getImageUrl?.(product.image) || null;
+  }, [product.image, imageError]);
 
-  let stockStatusClass = '';
-  if (product.stockQty === 0) {
-    stockStatusClass = 'text-[var(--stock-outstock)]';
-  } else if (product.stockQty <= stockAlertThreshold) {
-    stockStatusClass = 'text-[var(--stock-lowstock)]';
-  } else {
-    stockStatusClass = 'text-[var(--stock-instock)]';
-  }
+  const stockStatusClass = useMemo(() => {
+    if (product.stockQty === 0) return "text-[var(--stock-outstock)]";
+    if (product.stockQty <= stockAlertThreshold) return "text-[var(--stock-lowstock)]";
+    return "text-[var(--stock-instock)]";
+  }, [product.stockQty, stockAlertThreshold]);
 
-  const handleImageError = () => {
+  const handleAdd = useCallback(() => {
+    onAdd(product);
+  }, [onAdd, product]);
+
+  const handleImageError = useCallback(() => {
     setImageError(true);
-  };
+  }, []);
 
   return (
     <button
-      onClick={() => onAdd(product)}
+      onClick={handleAdd}
       disabled={isDisabled}
       className={`group relative rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${
-        isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+        isDisabled ? "opacity-50 cursor-not-allowed" : ""
       }`}
     >
-      {/* Background image or fallback gradient */}
       {!imageError && imageUrl ? (
         <>
           <div
@@ -70,7 +60,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--product-card-bg)] to-[var(--card-bg)] border border-[var(--product-card-border)]" />
       )}
 
-      {/* Content */}
       <div className="relative z-10 p-4 flex flex-col items-center text-center min-h-[200px]">
         {imageError || !imageUrl ? (
           <Package className="w-10 h-10 text-[var(--accent-blue)] mb-2" />
@@ -79,8 +68,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
             <img
               src={imageUrl}
               alt={product.name}
-              className="w-full h-full object-cover"
+              loading="lazy"
               onError={handleImageError}
+              className="w-full h-full object-cover"
             />
           </div>
         )}
@@ -100,4 +90,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

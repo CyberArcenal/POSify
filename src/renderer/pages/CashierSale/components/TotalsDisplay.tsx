@@ -1,6 +1,6 @@
-import React from 'react';
-import Decimal from 'decimal.js';
-import { formatCurrency } from '../../../utils/formatters';
+import React, { useMemo } from "react";
+import Decimal from "decimal.js";
+import { formatCurrency } from "../../../utils/formatters";
 
 interface TotalsDisplayProps {
   subtotal: Decimal;
@@ -19,26 +19,31 @@ const TotalsDisplay: React.FC<TotalsDisplayProps> = ({
   loyaltyPointsToRedeem,
   total,
 }) => {
+  const discountAmount = useMemo(
+    () => (globalDiscount > 0 ? subtotal.times(globalDiscount / 100) : null),
+    [subtotal, globalDiscount]
+  );
+  const taxAmount = useMemo(
+    () => (globalTax > 0 ? subtotal.times(globalTax / 100) : null),
+    [subtotal, globalTax]
+  );
+
   return (
     <div className="space-y-1 mb-4">
       <div className="flex justify-between text-sm">
         <span className="text-[var(--text-tertiary)]">Subtotal:</span>
         <span className="text-[var(--text-primary)]">{formatCurrency(subtotal.toFixed(2))}</span>
       </div>
-      {globalDiscount > 0 && (
+      {globalDiscount > 0 && discountAmount && (
         <div className="flex justify-between text-sm">
           <span className="text-[var(--text-tertiary)]">Discount ({globalDiscount}%):</span>
-          <span className="text-[var(--accent-amber)]">
-            -{formatCurrency(subtotal.times(globalDiscount / 100).toFixed(2))}
-          </span>
+          <span className="text-[var(--accent-amber)]">-{formatCurrency(discountAmount.toFixed(2))}</span>
         </div>
       )}
-      {globalTax > 0 && (
+      {globalTax > 0 && taxAmount && (
         <div className="flex justify-between text-sm">
           <span className="text-[var(--text-tertiary)]">Tax ({globalTax}%):</span>
-          <span className="text-[var(--accent-blue)]">
-            +{formatCurrency(subtotal.times(globalTax / 100).toFixed(2))}
-          </span>
+          <span className="text-[var(--accent-blue)]">+{formatCurrency(taxAmount.toFixed(2))}</span>
         </div>
       )}
       {useLoyalty && loyaltyPointsToRedeem > 0 && (
@@ -55,4 +60,4 @@ const TotalsDisplay: React.FC<TotalsDisplayProps> = ({
   );
 };
 
-export default TotalsDisplay;
+export default React.memo(TotalsDisplay);

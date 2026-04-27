@@ -10,7 +10,7 @@ import {
   PackagePlus,
 } from "lucide-react";
 import Decimal from "decimal.js";
-import { type Product } from "../../../api/core/product";
+import productAPI, { type Product } from "../../../api/core/product";
 import ProductActionsDropdown from "./ProductActionsDropdown"; // new import
 
 // Helper components (StatusBadge, StockBadge) remain unchanged
@@ -68,6 +68,11 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   onReorderLevelEdit,
   onReorderQtyEdit,
 }) => {
+    const getImageUrl = (image: string | null | undefined): string | null => {
+    if (!image) return null;
+    return productAPI.getImageUrl?.(image) || image;
+  };
+  
   if (products.length === 0) {
     return (
       <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-8 text-center">
@@ -86,8 +91,11 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg overflow-hidden flex flex-col">
       {/* Fixed Header Table */}
       <table className="w-full table-fixed">
-        <thead className="bg-[var(--table-header-bg)]">
+     <thead className="bg-[var(--table-header-bg)]">
           <tr>
+            <th className="w-16 px-2 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+              Image
+            </th>
             <th className="w-1/6 px-4 py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
               SKU
             </th>
@@ -106,7 +114,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
             <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
               Status
             </th>
-            <th className="w-1/12 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
+            <th className="w-48 px-4 py-3 text-center text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider">
               Actions
             </th>
           </tr>
@@ -117,12 +125,29 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       <div className="flex-1 overflow-auto min-h-0">
         <table className="w-full">
           <tbody className="divide-y divide-[var(--border-color)]">
-            {products.map((product) => (
+            {products.map((product) => {
+              const imageUrl = getImageUrl(product.image);
+              return (
+              
               <tr
                 key={product.id}
                 onClick={() => onView(product)}
                 className="hover:bg-[var(--table-row-hover)] transition-colors cursor-pointer"
               >
+                <td className="w-16 px-2 py-3">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={product.name}
+                        className="w-10 h-10 rounded object-cover border border-[var(--border-color)] bg-[var(--card-secondary-bg)]"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded bg-[var(--card-secondary-bg)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-tertiary)]">
+                        <Package className="w-5 h-5" />
+                      </div>
+                    )}
+                  </td>
                 <td className="w-1/6 px-4 py-3 text-sm font-mono text-[var(--text-primary)]">
                   {product.sku}
                 </td>
@@ -195,7 +220,8 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                   </div>
                 </td>
               </tr>
-            ))}
+            )}
+            )}
           </tbody>
         </table>
       </div>

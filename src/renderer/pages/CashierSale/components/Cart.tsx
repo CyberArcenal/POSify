@@ -1,4 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useState,
+} from "react";
 import { ShoppingCart } from "lucide-react";
 import Decimal from "decimal.js";
 import type {
@@ -20,8 +26,9 @@ import CustomerSelect from "../../../components/Selects/Customer";
 import {
   useDiscountEnabled,
   useLoyaltyPointsEnabled,
-  useMaxDiscountPercent,   // ✅ bagong hook
+  useMaxDiscountPercent,
 } from "../../../utils/posUtils";
+import { useDebounce } from "../hooks/useDebounce";
 
 interface CartProps {
   cart: CartItemType[];
@@ -35,19 +42,15 @@ interface CartProps {
   onGlobalDiscountChange: (value: number) => void;
   onGlobalTaxChange: (value: number) => void;
   onNotesChange: (value: string) => void;
-
   selectedCustomer: Customer | null;
   onCustomerSelect: (customer: Customer | null) => void;
-
   loyaltyPointsAvailable: number;
   loyaltyPointsToRedeem: number;
   useLoyalty: boolean;
   onUseLoyaltyChange: (checked: boolean) => void;
   onLoyaltyPointsChange: (points: number) => void;
-
   paymentMethod: PaymentMethod;
   onPaymentMethodChange: (method: PaymentMethod) => void;
-
   isProcessing: boolean;
   onCheckout: () => void;
 }
@@ -76,28 +79,47 @@ const Cart: React.FC<CartProps> = ({
   isProcessing,
   onCheckout,
 }) => {
-  const subtotal = calculateSubtotal(cart);
-  const loyaltyDeduction = useLoyalty
-    ? new Decimal(loyaltyPointsToRedeem)
-    : new Decimal(0);
-  const total = calculateCartTotal(
-    cart,
-    globalDiscount,
-    globalTax,
-    loyaltyDeduction,
-  );
-  const maxRedeemable = calculateMaxRedeemable(
-    loyaltyPointsAvailable,
-    cart,
-    globalDiscount,
-    globalTax,
-  );
-
   const cartContainerRef = useRef<HTMLDivElement | null>(null);
   const discountEnabled = useDiscountEnabled();
   const isPointEnabled = useLoyaltyPointsEnabled();
-  const maxDiscount = useMaxDiscountPercent(); // ✅ maximum discount mula sa settings
+  const maxDiscount = useMaxDiscountPercent();
 
+  // ========== Debounced inputs ==========
+  const [localDiscount, setLocalDiscount] = useState(globalDiscount);
+  const [localTax, setLocalTax] = useState(globalTax);
+  const debouncedDiscount = useDebounce(localDiscount, 300);
+  const debouncedTax = useDebounce(localTax, 300);
+
+  useEffect(() => {
+    onGlobalDiscountChange(debouncedDiscount);
+  }, [debouncedDiscount, onGlobalDiscountChange]);
+
+  useEffect(() => {
+    onGlobalTaxChange(debouncedTax);
+  }, [debouncedTax, onGlobalTaxChange]);
+
+  // ========== Memoized calculations ==========
+  const subtotal = useMemo(() => calculateSubtotal(cart), [cart]);
+  const loyaltyDeduction = useMemo(
+    () => (useLoyalty ? new Decimal(loyaltyPointsToRedeem) : new Decimal(0)),
+    [useLoyalty, loyaltyPointsToRedeem]
+  );
+  const total = useMemo(
+    () => calculateCartTotal(cart, globalDiscount, globalTax, loyaltyDeduction),
+    [cart, globalDiscount, globalTax, loyaltyDeduction]
+  );
+  const maxRedeemable = useMemo(
+    () =>
+      calculateMaxRedeemable(
+        loyaltyPointsAvailable,
+        cart,
+        globalDiscount,
+        globalTax
+      ),
+    [loyaltyPointsAvailable, cart, globalDiscount, globalTax]
+  );
+
+  // Auto-scroll to bottom when cart changes
   useEffect(() => {
     if (cartContainerRef.current) {
       cartContainerRef.current.scrollTo({
@@ -106,6 +128,14 @@ const Cart: React.FC<CartProps> = ({
       });
     }
   }, [cart]);
+
+  // Stable callbacks for memoized children
+  const handleCustomerSelect = useCallback(
+    (id: number | null, customer: Customer | null) => {
+      onCustomerSelect(customer ? customer : null);
+    },
+    [onCustomerSelect]
+  );
 
   return (
     <div className="flex flex-col h-full bg-[var(--cart-bg)] border-l border-[var(--border-color)]">
@@ -135,7 +165,7 @@ const Cart: React.FC<CartProps> = ({
               onRemove={onRemove}
               onUpdateDiscount={onUpdateDiscount}
               onUpdateTax={onUpdateTax}
-              maxDiscount={maxDiscount} // ✅ ipinapasa sa bawat CartItem
+              maxDiscount={maxDiscount}
             />
           ))
         )}
@@ -144,8 +174,11 @@ const Cart: React.FC<CartProps> = ({
       <div className="p-4 border-t border-[var(--border-color)] space-y-3">
         <CustomerSelect
           value={selectedCustomer?.id || null}
-          onChange={(id, customer) => {
-            onCustomerSelect(customer ? customer : null);
+          onChange={(customerId, customer) => {
+            handleCustomerSelect(
+              customerId,
+              customer === undefined ? null : customer
+            );
           }}
           showLoyalty
           placeholder="Select customer..."
@@ -184,11 +217,11 @@ const Cart: React.FC<CartProps> = ({
             <input
               type="number"
               min="0"
-              max={maxDiscount} // ✅ max mula sa settings
+              max={maxDiscount}
               disabled={!discountEnabled}
-              value={globalDiscount}
+              value={localDiscount}
               onChange={(e) =>
-                onGlobalDiscountChange(
+                setLocalDiscount(
                   Math.min(maxDiscount, parseFloat(e.target.value) || 0)
                 )
               }
@@ -231,4 +264,4 @@ const Cart: React.FC<CartProps> = ({
   );
 };
 
-export default Cart;
+export default React.memo(Cart);

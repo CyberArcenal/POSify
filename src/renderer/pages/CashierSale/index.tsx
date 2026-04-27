@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Search, Loader2, Barcode, RefreshCw, XCircle, X } from "lucide-react";
 import Decimal from "decimal.js";
 import { useProducts } from "./hooks/useProducts";
@@ -12,11 +12,12 @@ import CheckoutDialog from "./components/CheckoutDialog";
 import { calculateCartTotal } from "./utils";
 import type { CartItem } from "./types";
 import PaymentSuccessDialog from "./components/PaymentSuccessDialog";
-import CategorySelect from "../../components/Selects/Category"; // adjust path as needed
+import CategorySelect from "../../components/Selects/Category";
 import CashierHeader from "./components/CashierHeader";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useBarcodeEnabled } from "../../utils/posUtils";
 import productAPI from "../../api/core/product";
+import { useBarcodeScanner } from "./hooks/useBarcodeScanner";
 
 const Cashier: React.FC = () => {
   const {
@@ -58,13 +59,8 @@ const Cashier: React.FC = () => {
   } = useLoyaltyMethod(selectedCustomer?.id);
 
   const { isProcessing, processCheckout } = useCheckout();
-  const lastScannedRef = useRef<{ barcode: string; time: number } | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<
-    "cash" | "card" | "wallet"
-  >("cash");
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card" | "wallet">("cash");
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
-
-  // Success dialog state
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [successData, setSuccessData] = useState<{
     sale: any;
@@ -74,56 +70,65 @@ const Cashier: React.FC = () => {
     total: Decimal;
     cartItems: CartItem[];
   } | null>(null);
-
   const [scannedBarcode, setScannedBarcode] = useState<string>("");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const itemCount = cart.reduce((acc, item) => acc + item.cartQuantity, 0);
-  // Compute final total
-  const loyaltyDeduction = useLoyalty
-    ? new Decimal(loyaltyPointsToRedeem)
-    : new Decimal(0);
-  const finalTotal = calculateCartTotal(
-    cart,
-    globalDiscount,
-    globalTax,
-    loyaltyDeduction,
+
+  // ========== OPTIMIZATION: useMemo for heavy calculations ==========
+  const loyaltyDeduction = useMemo(
+    () => (useLoyalty ? new Decimal(loyaltyPointsToRedeem) : new Decimal(0)),
+    [useLoyalty, loyaltyPointsToRedeem]
   );
-  const handleCheckoutClick = () => {
+
+  const finalTotal = useMemo(
+    () => calculateCartTotal(cart, globalDiscount, globalTax, loyaltyDeduction),
+    [cart, globalDiscount, globalTax, loyaltyDeduction]
+  );
+
+  const itemCount = useMemo(
+    () => cart.reduce((acc, item) => acc + item.cartQuantity, 0),
+    [cart]
+  );
+
+  // ========== Handlers with useCallback ==========
+  const handleCheckoutClick = useCallback(() => {
     if (cart.length === 0) {
       alert("Please add items to the cart.");
       return;
     }
     setShowCheckoutDialog(true);
-  };
+  }, [cart.length]);
 
-  const handleConfirmCheckout = async (paidAmount?: number) => {
-    setShowCheckoutDialog(false);
-    await processCheckout(
-      cart,
-      selectedCustomer,
-      paymentMethod,
-      notes,
-      useLoyalty ? loyaltyPointsToRedeem : 0,
-      (sale) => {
-        const change =
-          paymentMethod === "cash" && paidAmount !== undefined
-            ? new Decimal(paidAmount).minus(finalTotal)
-            : undefined;
+  const handleConfirmCheckout = useCallback(
+    async (paidAmount?: number) => {
+      setShowCheckoutDialog(false);
+      await processCheckout(
+        cart,
+        selectedCustomer,
+        paymentMethod,
+        notes,
+        useLoyalty ? loyaltyPointsToRedeem : 0,
+        (sale) => {
+          const change =
+            paymentMethod === "cash" && paidAmount !== undefined
+              ? new Decimal(paidAmount).minus(finalTotal)
+              : undefined;
 
-        setSuccessData({
-          sale,
-          paidAmount,
-          change,
-          paymentMethod,
-          total: finalTotal,
-          cartItems: cart,
-        });
-        setShowSuccessDialog(true);
-      },
-    );
-  };
+          setSuccessData({
+            sale,
+            paidAmount,
+            change,
+            paymentMethod,
+            total: finalTotal,
+            cartItems: cart,
+          });
+          setShowSuccessDialog(true);
+        }
+      );
+    },
+    [cart, selectedCustomer, paymentMethod, notes, useLoyalty, loyaltyPointsToRedeem, finalTotal, processCheckout]
+  );
 
-  const handleSuccessDialogClose = () => {
+  const handleSuccessDialogClose = useCallback(() => {
     setShowSuccessDialog(false);
     setSuccessData(null);
     clearCart();
@@ -132,21 +137,10 @@ const Cashier: React.FC = () => {
     setUseLoyalty(false);
     setLoyaltyPointsToRedeem(0);
     loadProducts();
-  };
+  }, [clearCart, setSelectedCustomer, setUseLoyalty, setLoyaltyPointsToRedeem, loadProducts]);
+
   const handleBarcodeScanned = useCallback(
     async (barcode: string) => {
-      if (!isBarcodeEnabled) return;
-
-      // Ignore if same barcode within 500ms (adjust as needed)
-      if (
-        lastScannedRef.current?.barcode === barcode &&
-        Date.now() - lastScannedRef.current.time < 500
-      ) {
-        console.log("Ignoring duplicate barcode scan");
-        return;
-      }
-      lastScannedRef.current = { barcode, time: Date.now() };
-
       setScannedBarcode(barcode);
       try {
         const response = await productAPI.getByBarcode(barcode);
@@ -160,13 +154,15 @@ const Cashier: React.FC = () => {
         setSearchTerm(barcode);
       }
     },
-    [isBarcodeEnabled, addToCart, setSearchTerm],
+    [addToCart, setSearchTerm]
   );
 
-  // Keyboard shortcuts
+  // Use optimized barcode scanner hook
+  useBarcodeScanner(handleBarcodeScanned, isBarcodeEnabled);
+
+  // Keyboard shortcuts (unchanged, but keep as is)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Huwag i-trigger kung nasa input/textarea/select ang focus
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
@@ -174,14 +170,9 @@ const Cashier: React.FC = () => {
       ) {
         return;
       }
-
-      // Ctrl+D = Global Discount
       if (e.ctrlKey && e.key === "d") {
         e.preventDefault();
-        const discountStr = window.prompt(
-          "Enter global discount percentage:",
-          String(globalDiscount),
-        );
+        const discountStr = window.prompt("Enter global discount percentage:", String(globalDiscount));
         if (discountStr !== null) {
           const discount = parseFloat(discountStr);
           if (!isNaN(discount) && discount >= 0 && discount <= 100) {
@@ -191,30 +182,20 @@ const Cashier: React.FC = () => {
           }
         }
       }
-
-      // Ctrl+Enter = Checkout
       if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
         handleCheckoutClick();
       }
-
-      // Ctrl+Shift+N = Multiply quantities
       if (e.ctrlKey && e.shiftKey && e.key === "N") {
         e.preventDefault();
-        const factorStr = window.prompt(
-          "Enter multiplier factor (e.g., 2 to double):",
-          "2",
-        );
+        const factorStr = window.prompt("Enter multiplier factor (e.g., 2 to double):", "2");
         if (factorStr !== null) {
           const factor = parseFloat(factorStr);
           if (!isNaN(factor) && factor > 0) {
-            // I-multiply ang bawat item sa cart, check stock limit
             cart.forEach((item) => {
               const newQty = Math.floor(item.cartQuantity * factor);
               if (newQty > item.stockQty) {
-                alert(
-                  `Cannot multiply ${item.name}: only ${item.stockQty} available.`,
-                );
+                alert(`Cannot multiply ${item.name}: only ${item.stockQty} available.`);
               } else {
                 updateCartQuantity(item.id, newQty);
               }
@@ -225,72 +206,17 @@ const Cashier: React.FC = () => {
         }
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    globalDiscount,
-    setGlobalDiscount,
-    handleCheckoutClick,
-    cart,
-    updateCartQuantity,
-  ]);
+  }, [globalDiscount, setGlobalDiscount, handleCheckoutClick, cart, updateCartQuantity]);
 
-  // Barcode scanner logic (only when barcodeMode is true)
+  // Initial load (unchanged)
   useEffect(() => {
-    if (!isBarcodeEnabled) return;
-
-    let scanBuffer = "";
-    let scanTimeout: number;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        e.target instanceof HTMLSelectElement
-      ) {
-        return;
-      }
-
-      if (e.key === "Enter") {
-        if (scanBuffer.length > 0) {
-          window.backendAPI
-            .barcode({ method: "emit", params: { barcode: scanBuffer } })
-            .catch(console.error);
-          scanBuffer = "";
-        }
-        return;
-      }
-
-      if (e.key.length === 1) {
-        scanBuffer += e.key;
-        clearTimeout(scanTimeout);
-        scanTimeout = setTimeout(() => {
-          if (scanBuffer.length > 0) {
-            window.backendAPI
-              .barcode({ method: "emit", params: { barcode: scanBuffer } })
-              .catch(console.error);
-            scanBuffer = "";
-          }
-        }, 100);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.backendAPI.onBarcodeScanned(handleBarcodeScanned);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      clearTimeout(scanTimeout);
-      if (window.backendAPI.offBarcodeScanned) {
-        window.backendAPI.offBarcodeScanned(handleBarcodeScanned); // ← gagana na ito
-      }
-    };
-  }, [handleBarcodeScanned, isBarcodeEnabled]);
+    loadProducts();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="h-full flex flex-col bg-[var(--background-color)]">
-      {/* Header with search, category filter, barcode display, and actions */}
       <CashierHeader
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -305,13 +231,11 @@ const Cashier: React.FC = () => {
         onRefresh={loadProducts}
         onClearFilters={clearFilters}
         showClearFilters={!!(searchTerm || categoryId)}
-        // status indicators (mock for now, can be replaced with real hooks)
         printerReady={true}
         drawerOpen={false}
         online={true}
       />
 
-      {/* Rest of the component (ProductGrid, Cart, etc.) remains unchanged */}
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 overflow-y-auto">
           {loadingProducts ? (
@@ -377,4 +301,4 @@ const Cashier: React.FC = () => {
   );
 };
 
-export default Cashier;
+export default React.memo(Cashier);
