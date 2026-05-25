@@ -73,7 +73,7 @@ contextBridge.exposeInMainWorld("backendAPI", {
   printerReload: () => ipcRenderer.invoke("printer:reload"),
   cashDrawerReload: () => ipcRenderer.invoke("cashDrawer:reload"),
 
-  notifyAppReady: () => ipcRenderer.send('app:renderer-ready'),
+  notifyAppReady: () => ipcRenderer.send("app:renderer-ready"),
 
   printerStatus: () => ipcRenderer.invoke("printer:get-status"),
   printerAvailable: () => ipcRenderer.invoke("printer:is-available"),
@@ -83,9 +83,9 @@ contextBridge.exposeInMainWorld("backendAPI", {
   cashDrawerOpen: (reason = "sale") =>
     ipcRenderer.invoke("cashDrawer:open", reason),
   printerTestPrint: () => ipcRenderer.invoke("printer:test-print"),
-  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+  openExternal: (url) => ipcRenderer.invoke("open-external", url),
 
-    updater: (payload) => ipcRenderer.invoke("updater", payload),
+  updater: (payload) => ipcRenderer.invoke("updater", payload),
   on: (event, callback) => {
     ipcRenderer.on(event, callback);
     return () => ipcRenderer.removeListener(event, callback);
