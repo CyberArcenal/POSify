@@ -1,6 +1,4 @@
-// index.js placeholder
-// src/main/index.js
-
+// src/main/index.js (Tillify – aligned with Debtify startup style)
 /**
  * @file Main entry point for retail Tillify System
  * @version 0.0.0
@@ -35,10 +33,10 @@ protocol.registerSchemesAsPrivileged([
   {
     scheme: "app-image",
     privileges: {
-      standard: true, // para mag‑act like http/https
-      secure: true, // para i‑treat bilang secure (iwas mixed content)
+      standard: true,
+      secure: true,
       supportFetchAPI: true,
-      bypassCSP: true, // optional, para iwas CORS sa images
+      bypassCSP: true,
     },
   },
 ]);
@@ -148,7 +146,7 @@ async function log(level, message, data = null, writeToFile = false) {
 
       const logFile = path.join(
         logDir,
-        `POS-${new Date().toISOString().split("T")[0]}.log`
+        `Tillify-${new Date().toISOString().split("T")[0]}.log`
       );
       const logEntry = `${logMessage}${
         data ? "\n" + JSON.stringify(data, null, 2) : ""
@@ -387,6 +385,7 @@ async function createSplashWindow() {
       width: 500,
       height: 400,
       transparent: true,
+      backgroundColor: "#00000000", // ← Added: ensures transparent background (Debtify style)
       frame: false,
       alwaysOnTop: true,
       center: true,
@@ -482,7 +481,7 @@ async function createMainWindow() {
       y,
       minWidth: 1024,
       minHeight: 768,
-      show: false, // Important: hidden muna
+      show: false, // Important: hidden until renderer signals ready
       frame: true,
       titleBarStyle: "default",
       backgroundColor: "#ffffff",
@@ -501,7 +500,7 @@ async function createMainWindow() {
     mainWindow.setMenuBarVisibility(false);
     mainWindow.setTitle(`${APP_CONFIG.appName} v${APP_CONFIG.version}`);
 
-    // ----- BAGONG LOGIC: hintayin ang signal mula sa React -----
+    // ----- Wait for renderer-ready signal (Debtify style) -----
     let isSplashClosed = false;
 
     const closeSplashAndShowMain = () => {
@@ -550,7 +549,7 @@ async function createMainWindow() {
       mainWindow.webContents.openDevTools({ mode: "detach" });
     }
 
-    // Optional: ipaalam sa renderer ang database status
+    // Optional: notify renderer about database status
     mainWindow.webContents.on("did-finish-load", () => {
       mainWindow.webContents.send("app:database-status", {
         initialized: isDatabaseInitialized,
